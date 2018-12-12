@@ -336,42 +336,54 @@ class AccountAnalyticInvoiceLine(models.Model):
         return self._recurring_create_invoice(contract_to_invoice)
 
     @api.model
-    def _recurring_create_invoice(self, contract_to_invoice):
-        """Create invoices from contracts
-
+    def _recurring_create_invoice(self, contracts_to_invoice):
+        """
+        This method creates the invoices from the given contracts.
+        :param contracts_to_invoice: result of a read_group (contracts)
         :return: invoices created
         """
-        invoices = self.env['account.invoice']
-        for contract in contract_to_invoice:
-            lines = self.search(contract['__domain'])
-            if lines:
-                invoices |= lines._create_invoice()
-                lines._update_recurring_next_date()
+        invoice_model = self.env['account.invoice']
+        invoices_values = self._prepare_create_invoice(contracts_to_invoice)
+        invoices = invoice_model.create(invoices_values)
+        invoices.compute_taxes()
+        for contract in contracts_to_invoice:
+            self.search(contract['__domain'])._update_recurring_next_date()
         return invoices
 
-    @api.multi
-    def _create_invoice(self):
+    @api.model
+    def _prepare_create_invoice(self, contracts_to_invoice):
         """
-        :return: invoice created
+        This method the values of the invoices to create.
+        :param contracts_to_invoice: result of a read_group (contracts)
+        :return: list of dictionaries (invoices values)
         """
-        contract = self.mapped('contract_id')
-        date_invoice = min(self.mapped('recurring_next_date'))
-        invoice = self.env['account.invoice'].create(
-            contract._prepare_invoice(date_invoice)
-        )
-        for line in self:
-            invoice_line_vals = line._prepare_invoice_line(invoice.id)
-            if invoice_line_vals:
-                self.env['account.invoice.line'].create(invoice_line_vals)
-        invoice.compute_taxes()
-        return invoice
+        invoice_model = self.env['account.invoice']
+        invoices_values = []
+        for contract in contracts_to_invoice:
+            lines = self.search(contract['__domain'])
+            contract = lines.mapped('contract_id')
+            date_invoice = min(lines.mapped('recurring_next_date'))
+            invoice_values = contract._prepare_invoice(date_invoice)
+            for line in lines:
+                invoice_line_vals = line._prepare_invoice_line()
+                invoice_values.setdefault('invoice_line_ids', [])
+                invoice_values['invoice_line_ids'].append(
+                    (0, 0, invoice_line_vals))
+            # If no account on the product, the invoice lines account is
+            # taken from the invoice's journal in _onchange_product_id
+            new_invoice = invoice_model.new(invoice_values)
+            for invoice_line in new_invoice.invoice_line_ids:
+                invoice_line.invoice_id = new_invoice
+                invoice_line._onchange_product_id()
+            invoice_values = new_invoice._convert_to_write(new_invoice._cache)
+            invoices_values.append(invoice_values)
+        return invoices_values
 
     @api.multi
-    def _prepare_invoice_line(self, invoice_id):
+    def _prepare_invoice_line(self, invoice_id=False):
         self.ensure_one()
         invoice_line = self.env['account.invoice.line'].new(
             {
-                'invoice_id': invoice_id,
                 'product_id': self.product_id.id,
                 'quantity': self.quantity,
                 'uom_id': self.uom_id.id,
