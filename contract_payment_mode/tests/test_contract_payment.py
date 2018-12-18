@@ -32,8 +32,8 @@ class TestContractPaymentInit(odoo.tests.HttpCase):
         self.product = self.env['product.product'].create({
             'name': 'Custom Service',
             'type': 'service',
-            'uom_id': self.env.ref('product.product_uom_hour').id,
-            'uom_po_id': self.env.ref('product.product_uom_hour').id,
+            'uom_id': self.env.ref('uom.product_uom_hour').id,
+            'uom_po_id': self.env.ref('uom.product_uom_hour').id,
             'sale_ok': True,
         })
         self.contract = self.env['account.analytic.account'].create({
@@ -69,19 +69,22 @@ class TestContractPaymentInit(odoo.tests.HttpCase):
                          self.contract.partner_id.customer_payment_mode_id)
         self.contract.write({
             'recurring_invoices': True,
-            'recurring_interval': 1,
             'recurring_invoice_line_ids': [(0, 0, {
-                'quantity': 2.0,
-                'price_unit': 200.0,
-                'name': 'Database Administration 25',
                 'product_id': self.product.id,
+                'name': 'Database Administration 25',
+                'quantity': 2.0,
                 'uom_id': self.product.uom_id.id,
+                'price_unit': 200.0,
+                'recurring_rule_type': 'monthly',
+                'recurring_interval': 1,
+                'date_start': '2018-01-01',
+                'recurring_next_date': '2018-01-15',
+                'is_auto_renew': False,
             })]
         })
         self.contract.recurring_create_invoice()
-        new_invoice = self.env['account.invoice'].search([
-            ('contract_id', '=', self.contract.id)
-        ])
+        new_invoice = self.contract._get_related_invoices()
+        self.assertTrue(new_invoice)
         self.assertEqual(new_invoice.partner_id, self.contract.partner_id)
         self.assertEqual(new_invoice.payment_mode_id,
                          self.contract.payment_mode_id)
