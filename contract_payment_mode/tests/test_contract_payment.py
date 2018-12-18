@@ -32,8 +32,8 @@ class TestContractPaymentInit(odoo.tests.HttpCase):
         self.product = self.env['product.product'].create({
             'name': 'Custom Service',
             'type': 'service',
-            'uom_id': self.env.ref('product.product_uom_hour').id,
-            'uom_po_id': self.env.ref('product.product_uom_hour').id,
+            'uom_id': self.env.ref('uom.product_uom_hour').id,
+            'uom_po_id': self.env.ref('uom.product_uom_hour').id,
             'sale_ok': True,
         })
         self.contract = self.env['account.analytic.account'].create({
