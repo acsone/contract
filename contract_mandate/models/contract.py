@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017 Carlos Dauden - Tecnativa <carlos.dauden@tecnativa.com>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -25,8 +24,9 @@ class AccountAnalyticAccount(models.Model):
     )
 
     @api.multi
-    def _prepare_invoice(self):
-        invoice_vals = super(AccountAnalyticAccount, self)._prepare_invoice()
+    def _prepare_invoice(self, date_invoice, journal=None):
+        invoice_vals = super(AccountAnalyticAccount, self)._prepare_invoice(
+            date_invoice, journal)
         if self.mandate_id:
             invoice_vals['mandate_id'] = self.mandate_id.id
         elif self.payment_mode_id.payment_method_id.mandate_required:
