@@ -44,3 +44,18 @@ class AccountAnalyticAccount(models.Model):
             ], limit=1)
             invoice_vals['mandate_id'] = mandate.id
         return invoice_vals
+
+    @api.model
+    def _finalize_invoice_creation(self, invoices):
+        """
+        This override preserves the contract when calling the partner's
+        onchange.
+        """
+        mandates_by_invoice = {}
+        for invoice in invoices:
+            mandates_by_invoice[invoice] = invoice.mandate_id
+        res = super(AccountAnalyticAccount, self)._finalize_invoice_creation(
+            invoices)
+        for invoice in invoices:
+            invoice.mandate_id = mandates_by_invoice.get(invoice)
+        return res
