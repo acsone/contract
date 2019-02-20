@@ -25,6 +25,13 @@ class AccountAnalyticAccount(models.Model):
     )
 
     @api.multi
+    @api.onchange('payment_mode_id')
+    def _onchange_payment_mode_id(self):
+        self.ensure_one()
+        if not self.mandate_required:
+            self.mandate_id = False
+
+    @api.multi
     def _prepare_invoice(self, date_invoice, journal=None):
         invoice_vals = super(AccountAnalyticAccount, self)._prepare_invoice(
             date_invoice, journal)
