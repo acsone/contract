@@ -34,11 +34,7 @@ tables_to_rename = [
     # Contract Template Line
     ('account_analytic_contract_line', 'contract_template_line'),
 ]
-columns_to_copy = {
-    'contract_line': [
-        ('analytic_account_id', 'contract_id', None),
-    ],
-}
+
 xmlids_to_rename = [
     (
         'contract.account_analytic_cron_for_invoice',
@@ -71,22 +67,8 @@ xmlids_to_rename = [
 ]
 
 
-def _get_contract_field_name(cr):
-    """
-    Contract field changed the name from analytic_account_id to contract_id
-    in 12.0.2.0.0. This method used to get the contract field name in
-    account_analytic_invoice_line"""
-    return (
-        'contract_id'
-        if openupgrade.column_exists(
-            cr, 'account_analytic_invoice_line', 'contract_id'
-        )
-        else 'analytic_account_id'
-    )
-
-
 def create_contract_records(cr):
-    contract_field_name = _get_contract_field_name(cr)
+    contract_field_name = 'contract_id'
     openupgrade.logged_query(
         cr, """
         CREATE TABLE contract_contract
@@ -96,10 +78,8 @@ def create_contract_records(cr):
         cr, sql.SQL("""
         INSERT INTO contract_contract
         SELECT * FROM account_analytic_account
-        WHERE id IN (SELECT DISTINCT {} FROM contract_line)
-        """).format(
-            sql.Identifier(contract_field_name),
-        ),
+        WHERE partner_id IS NOT NULL
+        """),
     )
     # Handle id sequence
     cr.execute("CREATE SEQUENCE IF NOT EXISTS contract_contract_id_seq")
@@ -135,5 +115,4 @@ def migrate(env, version):
     openupgrade.rename_models(cr, models_to_rename)
     openupgrade.rename_tables(cr, tables_to_rename)
     openupgrade.rename_xmlids(cr, xmlids_to_rename)
-    openupgrade.copy_columns(cr, columns_to_copy)
     create_contract_records(cr)
