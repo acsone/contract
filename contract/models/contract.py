@@ -91,6 +91,7 @@ class ContractContract(models.Model):
         string='Commercial Entity',
         index=True
     )
+    note = fields.Text(string="Notes")
 
     @api.multi
     def _inverse_partner_id(self):
