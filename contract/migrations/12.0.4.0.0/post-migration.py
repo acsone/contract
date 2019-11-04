@@ -60,4 +60,4 @@ def migrate(env, version):
         # it was a PR
         _init_last_date_invoiced_on_contract_lines(env)
         _init_invoicing_partner_id_on_contracts(env)
-    assign_salesman(env)
+        assign_salesman(env)
