@@ -4,7 +4,7 @@
 from odoo import api, fields, models, _
 
 
-class ContractManuallyCreateInvoice(models.Model):
+class ContractManuallyCreateInvoice(models.TransientModel):
 
     _name = 'contract.manually.create.invoice'
     _description = 'Contract Manually Create Invoice Wizard'
@@ -49,9 +49,18 @@ class ContractManuallyCreateInvoice(models.Model):
     @api.multi
     def create_invoice(self):
         self.ensure_one()
-        invoices = self.env['contract.contract'].cron_recurring_create_invoice(
+        contract_model = self.env['contract.contract']
+        contracts = contract_model.search(
+            contract_model._get_contracts_to_invoice_domain(self.invoice_date)
+        )
+        invoices = contract_model.cron_recurring_create_invoice(
             self.invoice_date
         )
+        for contract in contracts:
+            contract.message_post(
+                body=_("Manually invoiced. Invoice date: %s")
+                % self.invoice_date
+            )
         return {
             "type": "ir.actions.act_window",
             "name": _("Invoices"),

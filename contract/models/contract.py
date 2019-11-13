@@ -450,6 +450,10 @@ class ContractContract(models.Model):
         This method triggers the creation of the next invoices of the contracts
         even if their next invoicing date is in the future.
         """
+        self.message_post(
+            body=_("Manually invoiced. Invoice date: %s")
+            % self.recurring_next_date
+        )
         return self._recurring_create_invoice()
 
     @api.multi
