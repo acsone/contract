@@ -41,11 +41,20 @@ class SaleOrder(models.Model):
     @api.multi
     def _prepare_contract_value(self, contract_template):
         self.ensure_one()
+        journal = self.env['account.journal'].search(
+            [
+                ('type', '=', contract_template.contract_type),
+                ('company_id', '=', self.company_id.id),
+            ],
+            limit=1,
+        )
+
         return {
             'name': '{template_name}: {sale_name}'.format(
                 template_name=contract_template.name, sale_name=self.name
             ),
             'partner_id': self.partner_id.id,
+            'journal_id': journal.id if journal else False,
             'company_id': self.company_id.id,
             'contract_template_id': contract_template.id,
             'user_id': self.user_id.id,
