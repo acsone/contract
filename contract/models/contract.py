@@ -211,7 +211,9 @@ class ContractContract(models.Model):
                     field.name in self.NO_SYNC,
                 )
             ):
-                self[field_name] = self.contract_template_id[field_name]
+                if self.contract_template_id[field_name]:
+                    self[field_name] = self.contract_template_id[field_name]
+        self._onchange_contract_type()
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
