@@ -234,9 +234,9 @@ class TestContract(TestContractBase):
     def test_contract_yearly_pre_paid(self):
         recurring_next_date = to_date('2019-02-22')
         last_date_invoiced = to_date('2019-02-21')
+        self.acct_line.recurring_rule_type = 'yearly'
         self.acct_line.date_end = '2020-02-22'
         self.acct_line.recurring_next_date = '2018-02-22'
-        self.acct_line.recurring_rule_type = 'yearly'
         self.acct_line.recurring_invoicing_type = 'pre-paid'
         self.contract.recurring_create_invoice()
         invoices_weekly = self.contract._get_related_invoices()
@@ -606,7 +606,7 @@ class TestContract(TestContractBase):
         for recurring_next_date, combination in combinations:
             self.assertEqual(
                 recurring_next_date,
-                contract_line_env._compute_first_recurring_next_date(
+                contract_line_env._get_recurring_next_date(
                     *combination
                 ),
                 error_message(*combination),
@@ -1534,6 +1534,12 @@ class TestContract(TestContractBase):
 
     def test_contract_line_state(self):
         lines = self.env['contract.line']
+        new_line = self.acct_line.copy()
+        new_line.write({
+                'date_start': self.today + relativedelta(months=3),
+                'recurring_next_date': self.today + relativedelta(months=3),
+                'date_end': self.today + relativedelta(months=5),
+            })
         # upcoming
         lines |= self.acct_line.copy(
             {
@@ -1839,3 +1845,65 @@ class TestContract(TestContractBase):
         self.assertTrue(self.acct_line.recurring_next_date)
         self.acct_line.stop(self.acct_line.last_date_invoiced)
         self.assertFalse(self.acct_line.recurring_next_date)
+
+    def test_contract_monthly_pre_paid_custom_first_period(self):
+        recurring_next_date = to_date('2019-04-01')
+        last_date_invoiced = to_date('2019-03-31')
+        self.acct_line.recurring_next_date = '2019-03-22'
+        self.acct_line.date_start = '2019-03-22'
+        self.acct_line.next_period_end_date = '2019-03-31'
+        self.acct_line.recurring_rule_type = 'monthly'
+        self.acct_line.recurring_invoicing_type = 'pre-paid'
+        self.contract.recurring_create_invoice()
+        invoices = self.contract._get_related_invoices()
+        self.assertTrue(invoices)
+        self.assertEqual(
+            self.acct_line.recurring_next_date, recurring_next_date
+        )
+        self.assertEqual(self.acct_line.last_date_invoiced, last_date_invoiced)
+
+    def test_contract_monthly_post_paid_custom_first_period(self):
+        recurring_next_date = to_date('2019-05-01')
+        last_date_invoiced = to_date('2019-03-31')
+        self.acct_line.recurring_next_date = '2019-04-22'
+        self.acct_line.date_start = '2019-03-22'
+        self.acct_line.next_period_end_date = '2019-03-31'
+        self.acct_line.recurring_rule_type = 'monthly'
+        self.acct_line.recurring_invoicing_type = 'post-paid'
+        self.contract.recurring_create_invoice()
+        invoices = self.contract._get_related_invoices()
+        self.assertTrue(invoices)
+        self.assertEqual(
+            self.acct_line.recurring_next_date, recurring_next_date
+        )
+        self.assertEqual(self.acct_line.last_date_invoiced, last_date_invoiced)
+
+    def test_contract_monthlylastday_custom_first_period(self):
+        recurring_next_date = to_date('2019-03-31')
+        last_date_invoiced = to_date('2019-03-28')
+        self.acct_line.recurring_next_date = '2019-04-22'
+        self.acct_line.date_start = '2019-03-22'
+        self.acct_line.next_period_end_date = '2019-03-28'
+        self.acct_line.recurring_rule_type = 'monthlylastday'
+        self.acct_line.recurring_invoicing_type = 'post-paid'
+        self.contract.recurring_create_invoice()
+        invoices = self.contract._get_related_invoices()
+        self.assertTrue(invoices)
+        self.assertEqual(
+            self.acct_line.recurring_next_date, recurring_next_date
+        )
+        self.assertEqual(self.acct_line.last_date_invoiced, last_date_invoiced)
+
+    def test_check_next_period_end_date(self):
+        self.acct_line.recurring_next_date = '2019-04-22'
+        self.acct_line.date_start = '2019-03-22'
+        self.acct_line.date_end = '2019-05-22'
+        with self.assertRaises(ValidationError):
+            self.acct_line.next_period_end_date = '2019-03-21'
+        with self.assertRaises(ValidationError):
+            self.acct_line.next_period_end_date = '2019-05-23'
+        with self.assertRaises(ValidationError):
+            self.acct_line.last_date_invoiced = '2019-04-22'
+        with self.assertRaises(ValidationError):
+            self.acct_line.next_period_end_date = False
+        self.acct_line.last_date_invoiced = '2019-04-22'
