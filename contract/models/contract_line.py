@@ -537,7 +537,7 @@ class ContractLine(models.Model):
         'recurring_rule_type',
         'recurring_interval',
     )
-    def _onchange_date_start(self):
+    def onchange_date_start(self):
         for rec in self.filtered('date_start'):
             rec.recurring_next_date = self.get_next_invoice_date(
                 rec.date_start,
