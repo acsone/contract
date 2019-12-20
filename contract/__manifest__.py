@@ -22,6 +22,7 @@
     'data': [
         'security/contract_tag.xml',
         'wizards/contract_manually_create_invoice.xml',
+        'views/res_config_settings.xml',
         'security/ir.model.access.csv',
         'security/contract_security.xml',
         'report/report_contract.xml',
