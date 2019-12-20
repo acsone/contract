@@ -21,6 +21,7 @@
     "external_dependencies": {"python": ["dateutil"]},
     'data': [
         'security/contract_tag.xml',
+        'wizards/contract_manually_create_invoice.xml',
         'security/ir.model.access.csv',
         'security/contract_security.xml',
         'report/report_contract.xml',
