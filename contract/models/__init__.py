@@ -9,4 +9,6 @@ from . import contract_line
 from . import account_invoice
 from . import account_invoice_line
 from . import res_partner
+from . import res_company
+from . import res_config_settings
 from . import contract_tag
