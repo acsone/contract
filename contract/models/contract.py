@@ -453,13 +453,15 @@ class ContractContract(models.Model):
         even if their next invoicing date is in the future.
         """
         invoice = self._recurring_create_invoice()
-        self.message_post(
-            body=_(
-                'Contract manually invoiced: '
-                '<a href="#" data-oe-model="%s" data-oe-id="%s">Invoice</a>'
+        if invoice:
+            self.message_post(
+                body=_(
+                    'Contract manually invoiced: '
+                    '<a href="#" data-oe-model="%s" data-oe-id="%s">Invoice'
+                    '</a>'
+                )
+                % (invoice._name, invoice.id)
             )
-            % (invoice._name, invoice.id)
-        )
         return invoice
 
     @api.multi
