@@ -21,6 +21,7 @@ class ContractManuallyCreateInvoice(models.TransientModel):
     @api.depends('invoice_date')
     def _compute_contract_to_invoice_ids(self):
         if not self.invoice_date:
+            # trick to show no invoice when no date has been entered yet
             contract_to_invoice_domain = [('id', '=', False)]
         else:
             contract_to_invoice_domain = self.env[
