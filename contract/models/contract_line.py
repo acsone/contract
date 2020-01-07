@@ -540,7 +540,7 @@ class ContractLine(models.Model):
     def _onchange_date_start(self):
         for rec in self.filtered('date_start'):
             rec.recurring_next_date = self.get_next_invoice_date(
-                rec.date_start,
+                rec.next_period_date_start,
                 rec.recurring_invoicing_type,
                 rec.recurring_invoicing_offset,
                 rec.recurring_rule_type,
@@ -831,6 +831,17 @@ class ContractLine(models.Model):
                     }
                     if rec.last_date_invoiced == date_end:
                         values['recurring_next_date'] = False
+                    else:
+                        values['recurring_next_date'] = \
+                            self.get_next_invoice_date(
+                                rec.next_period_date_start,
+                                rec.recurring_invoicing_type,
+                                rec.recurring_invoicing_offset,
+                                rec.recurring_rule_type,
+                                rec.recurring_interval,
+                                max_date_end=date_end,
+                            )
+
                     rec.write(values)
                     if post_message:
                         msg = _(
