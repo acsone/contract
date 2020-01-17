@@ -17,6 +17,11 @@ class ContractManuallyCreateInvoice(models.TransientModel):
         comodel_name="contract.contract",
         compute="_compute_contract_to_invoice_ids",
     )
+    contract_type = fields.Selection(
+        selection=[('sale', 'Customer'), ('purchase', 'Supplier')],
+        default='sale',
+        required=True,
+    )
 
     @api.depends('invoice_date')
     def _compute_contract_to_invoice_ids(self):
@@ -29,6 +34,7 @@ class ContractManuallyCreateInvoice(models.TransientModel):
             ]._get_contracts_to_invoice_domain(self.invoice_date)
         self.contract_to_invoice_ids = self.env['contract.contract'].search(
             contract_to_invoice_domain
+            + [('contract_type', '=', self.contract_type)]
         )
         self.contract_to_invoice_count = len(self.contract_to_invoice_ids)
 
