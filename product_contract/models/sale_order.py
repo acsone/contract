@@ -2,7 +2,8 @@
 # Copyright 2018 ACSONE SA/NV.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import fields, api, models
+from odoo import fields, api, models, _
+from odoo.exceptions import ValidationError
 
 
 class SaleOrder(models.Model):
@@ -15,6 +16,18 @@ class SaleOrder(models.Model):
     need_contract_creation = fields.Boolean(
         compute='_compute_need_contract_creation'
     )
+
+    @api.constrains('state')
+    def check_contact_is_not_resiliated(self):
+        for rec in self:
+            if rec.state not in (
+                'sale',
+                'done',
+                'cancel',
+            ) and rec.order_line.filtered('contract_id.is_resiliated'):
+                raise ValidationError(
+                    _("You can't upsell or downsell a resiliated contract")
+                )
 
     @api.depends('order_line.contract_id', 'state')
     def _compute_need_contract_creation(self):
