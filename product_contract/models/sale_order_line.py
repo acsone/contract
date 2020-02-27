@@ -51,6 +51,17 @@ class SaleOrderLine(models.Model):
         copy=False,
     )
 
+    @api.constrains('contract_id')
+    def check_contact_is_not_resiliated(self):
+        for rec in self:
+            if (
+                rec.order_id.state not in ('sale', 'done', 'cancel')
+                and rec.contract_id.is_resiliated
+            ):
+                raise ValidationError(
+                    _("You can't upsell or downsell a resiliated contract")
+                )
+
     @api.multi
     def _get_auto_renew_rule_type(self):
         """monthly last day don't make sense for auto_renew_rule_type"""
