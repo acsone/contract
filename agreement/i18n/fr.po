@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: Weblate 3.7.1\n"
 
 #. module: agreement
-#: code:addons/agreement/models/agreement.py:59
+#: code:addons/agreement/models/agreement.py:74
 #, python-format
 msgid "%s (copy)"
 msgstr ""
@@ -36,14 +36,12 @@ msgstr "Actif"
 #. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__activity_ids
 #, fuzzy
-#| msgid "Active"
 msgid "Activities"
 msgstr "Actif"
 
 #. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__activity_state
 #, fuzzy
-#| msgid "Active"
 msgid "Activity State"
 msgstr "Actif"
 
@@ -54,21 +52,24 @@ msgid "Agreement"
 msgstr "Accord"
 
 #. module: agreement
+#: model_terms:ir.ui.view,arch_db:agreement.agreement_form
+#, fuzzy
+msgid "Agreement Name"
+msgstr "Accord"
+
+#. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__agreement_type_id
 #: model_terms:ir.ui.view,arch_db:agreement.agreement_type_form_view
 #: model_terms:ir.ui.view,arch_db:agreement.agreement_type_search
 #, fuzzy
-#| msgid "Agreement"
 msgid "Agreement Type"
 msgstr "Accord"
 
 #. module: agreement
 #: model:ir.actions.act_window,name:agreement.agreement_type_action
 #: model:ir.model,name:agreement.model_agreement_type
-#: model:ir.ui.menu,name:agreement.agreement_type_menu
 #: model_terms:ir.ui.view,arch_db:agreement.agreement_type_list_view
 #, fuzzy
-#| msgid "Agreements"
 msgid "Agreement Types"
 msgstr "Accords"
 
@@ -118,6 +119,14 @@ msgstr "Créé le"
 #: model:ir.model.fields,field_description:agreement.field_agreement_type__display_name
 msgid "Display Name"
 msgstr "Nom d'affichage"
+
+#. module: agreement
+#: model:ir.model.fields,field_description:agreement.field_agreement__domain
+#: model:ir.model.fields,field_description:agreement.field_agreement_type__domain
+#: model_terms:ir.ui.view,arch_db:agreement.agreement_search
+#: model_terms:ir.ui.view,arch_db:agreement.agreement_type_search
+msgid "Domain"
+msgstr ""
 
 #. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__end_date
@@ -281,6 +290,14 @@ msgid "Planned"
 msgstr ""
 
 #. module: agreement
+#: code:addons/agreement/models/agreement.py:45
+#: model_terms:ir.ui.view,arch_db:agreement.agreement_search
+#: model_terms:ir.ui.view,arch_db:agreement.agreement_type_search
+#, python-format
+msgid "Purchase"
+msgstr ""
+
+#. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__code
 msgid "Reference"
 msgstr "Référence"
@@ -288,6 +305,14 @@ msgstr "Référence"
 #. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__activity_user_id
 msgid "Responsible User"
+msgstr ""
+
+#. module: agreement
+#: code:addons/agreement/models/agreement.py:44
+#: model_terms:ir.ui.view,arch_db:agreement.agreement_search
+#: model_terms:ir.ui.view,arch_db:agreement.agreement_type_search
+#, python-format
+msgid "Sale"
 msgstr ""
 
 #. module: agreement
@@ -350,7 +375,6 @@ msgstr ""
 #. module: agreement
 #: model_terms:ir.ui.view,arch_db:agreement.agreement_type_list_view
 #, fuzzy
-#| msgid "Name"
 msgid "Type Name"
 msgstr "Nom"
 
@@ -367,14 +391,12 @@ msgstr ""
 #. module: agreement
 #: model:res.groups,name:agreement.group_use_agreement_template
 #, fuzzy
-#| msgid "When the agreement starts."
 msgid "Use agreement template"
 msgstr "Quand le contrat débute."
 
 #. module: agreement
 #: model:res.groups,name:agreement.group_use_agreement_type
 #, fuzzy
-#| msgid "When the agreement ends."
 msgid "Use agreement type"
 msgstr "Quand le contrat finit."
 
