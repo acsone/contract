@@ -287,7 +287,11 @@ class ContractContract(models.Model):
 
     @api.onchange('partner_id', 'company_id')
     def _onchange_partner_id(self):
-        partner = self.partner_id.with_context(force_company=company_id)
+        partner = (
+            self.partner_id
+            if not self.company_id
+            else self.partner_id.with_context(force_company=company_id)
+        )
         self.pricelist_id = partner.property_product_pricelist.id
         self.fiscal_position_id = partner.env[
             'account.fiscal.position'
