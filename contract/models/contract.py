@@ -290,7 +290,7 @@ class ContractContract(models.Model):
         partner = (
             self.partner_id
             if not self.company_id
-            else self.partner_id.with_context(force_company=company_id)
+            else self.partner_id.with_context(force_company=self.company_id.id)
         )
         self.pricelist_id = partner.property_product_pricelist.id
         self.fiscal_position_id = partner.env[
