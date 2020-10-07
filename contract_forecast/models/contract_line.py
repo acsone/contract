@@ -52,7 +52,7 @@ class ContractLine(models.Model):
     @api.multi
     def _get_generate_forecast_periods_criteria(self, period_date_end):
         self.ensure_one()
-        if not self.contract_id.comapny_id.enable_contract_forecast:
+        if not self.contract_id.company_id.enable_contract_forecast:
             return False
         if self.is_canceled or not self.active:
             return False
