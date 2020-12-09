@@ -264,14 +264,12 @@ msgstr ""
 #. module: contract
 #: model:ir.model.fields,field_description:contract.field_contract_line__analytic_tag_ids
 #, fuzzy
-#| msgid "Analytic Account"
 msgid "Analytic Tags"
 msgstr "विश्लेषणात्मक खाता"
 
 #. module: contract
 #: model:ir.model.fields,field_description:contract.field_contract_line__analytic_account_id
 #, fuzzy
-#| msgid "Analytic Account"
 msgid "Analytic account"
 msgstr "विश्लेषणात्मक खाता"
 
@@ -336,7 +334,6 @@ msgstr ""
 #. module: contract
 #: model_terms:ir.ui.view,arch_db:contract.contract_contract_form_view
 #, fuzzy
-#| msgid "Contract Template"
 msgid "Cancel Contract Termination"
 msgstr "अनुबंध टेम्पलेट"
 
@@ -426,7 +423,6 @@ msgstr "अनुबंध"
 #. module: contract
 #: model_terms:ir.ui.view,arch_db:contract.contract_contract_terminate_form_view
 #, fuzzy
-#| msgid "Contract Template"
 msgid "Contract Contract Terminate"
 msgstr "अनुबंध टेम्पलेट"
 
@@ -490,14 +486,12 @@ msgstr "अनुबंध टेम्पलेट"
 #: model:ir.model,name:contract.model_contract_template_line
 #: model_terms:ir.ui.view,arch_db:contract.contract_template_line_form_view
 #, fuzzy
-#| msgid "Contract Template"
 msgid "Contract Template Line"
 msgstr "अनुबंध टेम्पलेट"
 
 #. module: contract
 #: model_terms:ir.ui.view,arch_db:contract.contract_template_form_view
 #, fuzzy
-#| msgid "Contract Template"
 msgid "Contract Template Lines"
 msgstr "अनुबंध टेम्पलेट"
 
@@ -512,7 +506,6 @@ msgstr ""
 #: model:ir.model,name:contract.model_contract_terminate_reason
 #: model:ir.ui.menu,name:contract.contract_terminate_reason_menu
 #, fuzzy
-#| msgid "Contract Template"
 msgid "Contract Termination Reason"
 msgstr "अनुबंध टेम्पलेट"
 
@@ -525,7 +518,6 @@ msgstr "अनुबंध टेम्पलेट"
 #. module: contract
 #: model:ir.model.fields,field_description:contract.field_contract_manually_create_invoice__contract_to_invoice_count
 #, fuzzy
-#| msgid "Invoice"
 msgid "Contract To Invoice Count"
 msgstr "बीजक"
 
@@ -624,12 +616,11 @@ msgstr ""
 #. module: contract
 #: model:ir.model.fields,field_description:contract.field_contract_contract__contract_line_ids
 #, fuzzy
-#| msgid "Contracts"
 msgid "Contract lines"
 msgstr "अनुबंध"
 
 #. module: contract
-#: code:addons/contract/models/contract.py:536
+#: code:addons/contract/models/contract.py:549
 #, python-format
 msgid ""
 "Contract manually invoiced: <a href=\"#\" data-oe-model=\"%s\" data-oe-id="
@@ -639,14 +630,12 @@ msgstr ""
 #. module: contract
 #: model:ir.model.fields,field_description:contract.field_contract_template__contract_line_ids
 #, fuzzy
-#| msgid "Contract Template"
 msgid "Contract template lines"
 msgstr "अनुबंध टेम्पलेट"
 
 #. module: contract
 #: model:res.groups,name:contract.can_terminate_contract
 #, fuzzy
-#| msgid "Contract Template"
 msgid "Contract: Can Terminate Contracts"
 msgstr "अनुबंध टेम्पलेट"
 
@@ -674,7 +663,6 @@ msgstr ""
 #. module: contract
 #: model_terms:ir.ui.view,arch_db:contract.contract_manually_create_invoice_form_view
 #, fuzzy
-#| msgid "Invoices"
 msgid "Create Invoices"
 msgstr "चालान"
 
@@ -959,14 +947,12 @@ msgstr "बीजक"
 #. module: contract
 #: model:ir.model.fields,field_description:contract.field_contract_contract__invoice_count
 #, fuzzy
-#| msgid "Invoice"
 msgid "Invoice Count"
 msgstr "बीजक"
 
 #. module: contract
 #: model:ir.model.fields,field_description:contract.field_contract_manually_create_invoice__invoice_date
 #, fuzzy
-#| msgid "Invoice"
 msgid "Invoice Date"
 msgstr "बीजक"
 
@@ -975,16 +961,19 @@ msgstr "बीजक"
 #: model:ir.model.fields,field_description:contract.field_contract_line__recurring_interval
 #: model:ir.model.fields,field_description:contract.field_contract_template_line__recurring_interval
 #, fuzzy
-#| msgid "Invoice"
 msgid "Invoice Every"
 msgstr "बीजक"
 
 #. module: contract
 #: model:ir.model,name:contract.model_account_invoice_line
 #, fuzzy
-#| msgid "Invoice"
 msgid "Invoice Line"
 msgstr "बीजक"
+
+#. module: contract
+#: model:mail.message.subtype,name:contract.mail_message_subtype_invoice_created
+msgid "Invoice created"
+msgstr ""
 
 #. module: contract
 #: model:ir.model.fields,help:contract.field_contract_abstract_contract_line__recurring_interval
@@ -1010,7 +999,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:contract.field_contract_line__recurring_invoicing_offset
 #: model:ir.model.fields,field_description:contract.field_contract_template_line__recurring_invoicing_offset
 #, fuzzy
-#| msgid "Invoice"
 msgid "Invoicing offset"
 msgstr "बीजक"
 
@@ -1051,7 +1039,6 @@ msgstr "पत्रिका"
 #: model:ir.model.fields,field_description:contract.field_contract_line__last_date_invoiced
 #: model:ir.model.fields,field_description:contract.field_contract_template_line__last_date_invoiced
 #, fuzzy
-#| msgid "Last Updated on"
 msgid "Last Date Invoiced"
 msgstr "अंतिम बार अद्यतन किया गया"
 
@@ -1220,7 +1207,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:contract.field_contract_line__note_invoicing_mode
 #: model:ir.model.fields,field_description:contract.field_contract_template_line__note_invoicing_mode
 #, fuzzy
-#| msgid "Invoice"
 msgid "Note Invoicing Mode"
 msgstr "बीजक"
 
@@ -1266,7 +1252,6 @@ msgstr ""
 #. module: contract
 #: model:ir.model.fields,field_description:contract.field_account_invoice__old_contract_id
 #, fuzzy
-#| msgid "Contract"
 msgid "Old Contract"
 msgstr "अनुबंध"
 
@@ -1463,7 +1448,6 @@ msgstr "अनुबंध"
 #: selection:contract.template.line,display_type:0
 #: model_terms:ir.ui.view,arch_db:contract.contract_abstract_contract_line_form_view
 #, fuzzy
-#| msgid "Description"
 msgid "Section"
 msgstr "विवरण"
 
@@ -1638,7 +1622,7 @@ msgid "Technical field for UX purpose."
 msgstr ""
 
 #. module: contract
-#: code:addons/contract/models/contract.py:571
+#: code:addons/contract/models/contract.py:584
 #: model_terms:ir.ui.view,arch_db:contract.contract_contract_form_view
 #: model_terms:ir.ui.view,arch_db:contract.contract_contract_terminate_form_view
 #, fuzzy, python-format
@@ -1843,7 +1827,7 @@ msgid "Year(s)"
 msgstr ""
 
 #. module: contract
-#: code:addons/contract/models/contract.py:585
+#: code:addons/contract/models/contract.py:598
 #, python-format
 msgid "You are not allowed to terminate contracts."
 msgstr ""

@@ -9,7 +9,7 @@
 
 {
     'name': 'Recurring - Contracts Management',
-    'version': '12.0.7.3.4',
+    'version': '12.0.7.4.0',
     'category': 'Contract Management',
     'license': 'AGPL-3',
     'author': "OpenERP SA, "
@@ -30,6 +30,7 @@
         'data/contract_cron.xml',
         'data/contract_renew_cron.xml',
         'data/mail_template.xml',
+        'data/mail_message_subtype.xml',
         'data/ir_ui_menu.xml',
         'wizards/contract_line_wizard.xml',
         'wizards/contract_manually_create_invoice.xml',

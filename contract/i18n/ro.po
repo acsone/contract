@@ -264,14 +264,12 @@ msgstr ""
 #. module: contract
 #: model:ir.model.fields,field_description:contract.field_contract_line__analytic_tag_ids
 #, fuzzy
-#| msgid "Analytic Account"
 msgid "Analytic Tags"
 msgstr "Cont analitic"
 
 #. module: contract
 #: model:ir.model.fields,field_description:contract.field_contract_line__analytic_account_id
 #, fuzzy
-#| msgid "Analytic Account"
 msgid "Analytic account"
 msgstr "Cont analitic"
 
@@ -467,7 +465,6 @@ msgstr ""
 #. module: contract
 #: model:ir.actions.act_window,name:contract.contract_tag_act_window
 #, fuzzy
-#| msgid "Analytic Account"
 msgid "Contract Tags"
 msgstr "Cont analitic"
 
@@ -609,7 +606,7 @@ msgid "Contract lines"
 msgstr ""
 
 #. module: contract
-#: code:addons/contract/models/contract.py:536
+#: code:addons/contract/models/contract.py:549
 #, python-format
 msgid ""
 "Contract manually invoiced: <a href=\"#\" data-oe-model=\"%s\" data-oe-id="
@@ -650,7 +647,6 @@ msgstr ""
 #. module: contract
 #: model_terms:ir.ui.view,arch_db:contract.contract_manually_create_invoice_form_view
 #, fuzzy
-#| msgid "Last Updated on"
 msgid "Create Invoices"
 msgstr "Ultima actualizare la"
 
@@ -816,7 +812,6 @@ msgstr "Nume Afişat"
 #: model:ir.model.fields,field_description:contract.field_contract_line__display_type
 #: model:ir.model.fields,field_description:contract.field_contract_template_line__display_type
 #, fuzzy
-#| msgid "Display Name"
 msgid "Display Type"
 msgstr "Nume Afişat"
 
@@ -956,6 +951,11 @@ msgid "Invoice Line"
 msgstr ""
 
 #. module: contract
+#: model:mail.message.subtype,name:contract.mail_message_subtype_invoice_created
+msgid "Invoice created"
+msgstr ""
+
+#. module: contract
 #: model:ir.model.fields,help:contract.field_contract_abstract_contract_line__recurring_interval
 #: model:ir.model.fields,help:contract.field_contract_line__recurring_interval
 #: model:ir.model.fields,help:contract.field_contract_template_line__recurring_interval
@@ -1018,7 +1018,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:contract.field_contract_line__last_date_invoiced
 #: model:ir.model.fields,field_description:contract.field_contract_template_line__last_date_invoiced
 #, fuzzy
-#| msgid "Last Updated on"
 msgid "Last Date Invoiced"
 msgstr "Ultima actualizare la"
 
@@ -1591,7 +1590,7 @@ msgid "Technical field for UX purpose."
 msgstr ""
 
 #. module: contract
-#: code:addons/contract/models/contract.py:571
+#: code:addons/contract/models/contract.py:584
 #: model_terms:ir.ui.view,arch_db:contract.contract_contract_form_view
 #: model_terms:ir.ui.view,arch_db:contract.contract_contract_terminate_form_view
 #, python-format
@@ -1795,7 +1794,7 @@ msgid "Year(s)"
 msgstr ""
 
 #. module: contract
-#: code:addons/contract/models/contract.py:585
+#: code:addons/contract/models/contract.py:598
 #, python-format
 msgid "You are not allowed to terminate contracts."
 msgstr ""
