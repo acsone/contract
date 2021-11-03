@@ -599,15 +599,21 @@ class ContractContract(models.Model):
         if not date_ref:
             date_ref = fields.Date.context_today(self)
         domain = self._get_contracts_to_invoice_domain(date_ref)
-        invoices = self.env["account.move"]
+        invoice_obj = self.env["account.move"]
+
+        contracts = self.search(domain)
+        companies = set(contracts.mapped("company_id"))
+        invoice_ids = []
         # Invoice by companies, so assignation emails get correct context
-        companies_to_invoice = self.read_group(domain, ["company_id"], ["company_id"])
-        for row in companies_to_invoice:
-            contracts_to_invoice = self.search(row["__domain"]).with_context(
-                allowed_company_ids=[row["company_id"][0]]
+        # Use ids instead of recordset for perfomances reasons
+        for company in companies:
+            contracts_to_invoice = contracts.filtered(
+                lambda c: c.company_id == company
+            ).with_company(company)
+            invoice_ids.extend(
+                contracts_to_invoice._recurring_create_invoice(date_ref).ids
             )
-            invoices |= contracts_to_invoice._recurring_create_invoice(date_ref)
-        return invoices
+        return invoice_obj.browse(invoice_ids)
 
     def action_terminate_contract(self):
         self.ensure_one()
