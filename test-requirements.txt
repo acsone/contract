@@ -1,0 +1,2 @@
+
+odoo14-addon-contract @ git+https://github.com/acsone/contract.git@14.0-imp-contract-dro#subdirectory=setup/contract
