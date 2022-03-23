@@ -42,7 +42,7 @@ class ContractLine(models.Model):
         string="Analytic Tags",
     )
     date_start = fields.Date(required=True)
-    date_end = fields.Date(compute="_compute_date_end", store=True, readonly=False)
+    date_end = fields.Date()
     termination_notice_date = fields.Date(
         string="Termination notice date",
         compute="_compute_termination_notice_date",
@@ -111,31 +111,6 @@ class ContractLine(models.Model):
         readonly=True,
         default=True,
     )
-
-    @api.depends(
-        "last_date_invoiced", "date_start", "date_end", "contract_id.last_date_invoiced"
-    )
-    def _compute_next_period_date_start(self):
-        """Rectify next period date start if another line in the contract has been
-        already invoiced previously when the recurrence is by contract.
-        """
-        rest = self.filtered(lambda x: x.contract_id.line_recurrence)
-        for rec in self - rest:
-            lines = rec.contract_id.contract_line_ids
-            if not rec.last_date_invoiced and any(lines.mapped("last_date_invoiced")):
-                next_period_date_start = max(
-                    lines.filtered("last_date_invoiced").mapped("last_date_invoiced")
-                ) + relativedelta(days=1)
-                if rec.date_end and next_period_date_start > rec.date_end:
-                    next_period_date_start = False
-                rec.next_period_date_start = next_period_date_start
-            else:
-                rest |= rec
-        super(ContractLine, rest)._compute_next_period_date_start()
-
-    @api.depends("contract_id.date_end", "contract_id.line_recurrence")
-    def _compute_date_end(self):
-        self._set_recurrence_field("date_end")
 
     @api.depends(
         "date_end",
@@ -721,9 +696,7 @@ class ContractLine(models.Model):
                 self.recurring_interval,
                 max_date_end=date_end,
             )
-        new_vals = self.read()[0]
-        new_vals.pop("id", None)
-        new_vals.pop("last_date_invoiced", None)
+        new_vals = self.copy_data({"last_date_invoiced": False})[0]
         values = self._convert_to_write(new_vals)
         values["date_start"] = date_start
         values["date_end"] = date_end
