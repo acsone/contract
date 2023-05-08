@@ -101,6 +101,8 @@
                                     <p><strong>#END#</strong>: End date of the
                                         invoiced period
                                     </p>
+                                    <p> <strong
+                                    >#INVOICEMONTHNAME#</strong>: Invoice month name of the invoiced period</p>
                                 </div>
                             </group>
                         </page>
