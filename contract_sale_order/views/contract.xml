@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!--Main FORM view-->
+    <record id="contract_contract_form_view" model="ir.ui.view">
+        <field name="model">contract.contract</field>
+        <field name="inherit_id" ref="contract.contract_contract_form_view" />
+        <field name="arch" type="xml">
+            <button name="action_show_invoices" position="before">
+                <button
+                    name="action_show_sale_orders"
+                    type="object"
+                    icon="fa-book"
+                    class="oe_stat_button"
+                    attrs="{'invisible': [('sale_order_count', '=', 0)]}"
+                >
+                    <field string="Sale Orders" name="sale_order_count" widget="statinfo" />
+                </button>
+            </button>
+            <xpath
+                expr="//field[@name='contract_line_ids']/tree/field[@name='analytic_distribution']"
+                position="before"
+            >
+                <field
+                    name="sale_order_line_id"
+                    attrs="{'invisible': [('parent.contract_type', '!=', 'sale')]}"
+                    domain="[('order_partner_id', '=', parent.partner_id)]"
+                />
+            </xpath>
+            <xpath
+                expr="//field[@name='contract_line_fixed_ids']/tree/field[@name='analytic_distribution']"
+                position="before"
+            >
+                <field
+                    name="sale_order_line_id"
+                    attrs="{'invisible': [('parent.contract_type', '!=', 'sale')]}"
+                    domain="[('order_partner_id', '=', parent.partner_id)]"
+                />
+            </xpath>
+        </field>
+    </record>
+</odoo>
