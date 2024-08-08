@@ -15,6 +15,9 @@
         "sale_timesheet",
     ],
     "data": [
+        'views/project_task.xml',
+        'views/contract_contract.xml',
+        'views/project_sale_line_employee_map.xml',
         "views/project_project.xml",
     ],
     "maintainer": ["sbidoul"],
