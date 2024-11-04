@@ -12,7 +12,7 @@ def to_date(date):
 
 class TestProductTemplate(TransactionCase):
     def setUp(self):
-        super(TestProductTemplate, self).setUp()
+        super().setUp()
         self.partner = self.env.ref("base.res_partner_2")
         self.product = self.env.ref("product.product_product_1")
         self.contract = self.env["contract.contract"].create(
