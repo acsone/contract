@@ -32,7 +32,7 @@
                 position="attributes"
             >
                 <attribute name="invisible">qty_type != 'fixed'</attribute>
-                </xpath>
+            </xpath>
         </field>
     </record>
 </odoo>
