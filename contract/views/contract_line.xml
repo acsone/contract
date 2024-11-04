@@ -17,11 +17,15 @@
                     <field name="is_stop_allowed" invisible="1" />
                     <field name="is_cancel_allowed" invisible="1" />
                     <field name="date_start" required="1" />
+                </group>
+                <group>
+                    <field name="date_end" required="is_auto_renew" />
+                </group>
+                <group>
                     <field name="next_period_date_start" />
                     <field name="recurring_next_date" />
                 </group>
                 <group>
-                    <field name="date_end" required="is_auto_renew" />
                     <field name="next_period_date_end" />
                 </group>
                 <group groups="base.group_no_one">
@@ -85,10 +89,10 @@
     <!-- TODO: Delete this view in migration to v13 or further migrations -->
     <!--TREE view-->
     <record id="contract_line_tree_view" model="ir.ui.view">
-        <field name="name">contract.line tree view (in contract)</field>
+        <field name="name">contract.line list view (in contract)</field>
         <field name="model">contract.line</field>
         <field name="arch" type="xml">
-            <tree
+            <list
                 decoration-muted="is_canceled"
                 decoration-info="create_invoice_visibility and not is_canceled"
             >
@@ -105,7 +109,7 @@
                 <field name="automatic_price" />
                 <field name="price_unit" readonly="automatic_price" />
                 <field name="specific_price" column_invisible="True" />
-                <field name="discount" groups="product.group_discount_per_so_line" />
+                <field name="discount" />
                 <field name="price_subtotal" />
                 <field name="recurring_interval" column_invisible="True" />
                 <field name="recurring_rule_type" column_invisible="True" />
@@ -166,12 +170,12 @@
                     groups="base.group_no_one"
                     invisible="not is_auto_renew"
                 />
-            </tree>
+            </list>
         </field>
     </record>
     <!--Supplier TREE view-->
     <record id="contract_line_supplier_tree_view" model="ir.ui.view">
-        <field name="name">contract.line supplier tree view (in contract)</field>
+        <field name="name">contract.line supplier list view (in contract)</field>
         <field name="model">contract.line</field>
         <field name="mode">primary</field>
         <field name="priority" eval="20" />
