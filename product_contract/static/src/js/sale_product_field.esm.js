@@ -27,6 +27,7 @@ patch(SaleOrderLineProductField.prototype, {
             default_product_id: this.props.record.data.product_id[0],
             default_partner_id: this.props.record.model.root.data.partner_id[0],
             default_company_id: this.props.record.model.root.data.company_id[0],
+            default_recurrence_number: this.props.record.data.recurrence_number,
             default_product_uom_qty: this.props.record.data.product_uom_qty,
             default_contract_id: this.props.record.data.contract_id[0],
             default_date_start: this.props.record.data.date_start,

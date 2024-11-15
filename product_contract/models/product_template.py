@@ -15,7 +15,7 @@ class ProductTemplate(models.Model):
         string="Contract Template",
         company_dependent=True,
     )
-    default_qty = fields.Integer(string="Default Quantity", default=1)
+    default_qty = fields.Integer(string="Recurrence Number", default=1)
     recurring_rule_type = fields.Selection(
         [
             ("daily", "Day(s)"),
