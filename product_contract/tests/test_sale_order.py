@@ -69,7 +69,7 @@ class TestSaleOrder(TransactionCase):
             lambda line: line.product_id == cls.product1
         )
         cls.order_line1.date_start = "2018-01-01"
-        cls.order_line1.product_uom_qty = 12
+        cls.order_line1.recurrence_number = 12
         pricelist = cls.sale.partner_id.property_product_pricelist.id
         cls.contract = cls.env["contract.contract"].create(
             {
@@ -384,11 +384,11 @@ class TestSaleOrder(TransactionCase):
                 "is_contract": True,
                 "recurring_rule_type": recurring_rule_type,
                 "contract_start_date_method": contract_start_date_method,
-                "property_contract_template_id": self.contract_template1,
+                "property_contract_template_id": self.contract_template1.id,
             }
         )
         if recurring_rule_type != "monthly":
-            product["force_month_%s" % recurring_rule_type] = force_month
+            product[f"force_month_{recurring_rule_type}"] = force_month
         return product
 
     def _create_and_confirm_sale(self, product):

@@ -13,7 +13,7 @@
                     </group>
                     <separator colspan="4" string="Recurrence Invoicing" />
                     <group>
-                        <field name="recurring_rule_type" />
+                        <field name="recurrence_number" />
                         <field name="contract_start_date_method" />
                         <field
                             name="date_start"
@@ -23,6 +23,7 @@
                         <field name="is_auto_renew" invisible="not date_end" />
                     </group>
                     <group>
+                        <field name="recurring_rule_type" />
                         <field name="recurring_invoicing_type" />
                         <field
                             name="date_end"
