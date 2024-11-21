@@ -1,0 +1,42 @@
+# Copyright 2024 ACSONE SA/NV
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
+
+from odoo import api, fields, models
+
+
+class SaleOrderLineContractMixin(models.AbstractModel):
+    _inherit = "sale.order.line.contract.mixin"
+
+    qty_type = fields.Selection(
+        selection=[
+            ("fixed", "Fixed quantity"),
+            ("variable", "Variable quantity"),
+        ],
+        required=False,
+        default="fixed",
+        string="Qty. type",
+        compute="_compute_product_contract_data",
+        precompute=True,
+        store=True,
+        readonly=False,
+    )
+    qty_formula_id = fields.Many2one(
+        comodel_name="contract.line.qty.formula",
+        string="Qty. formula",
+        compute="_compute_product_contract_data",
+        precompute=True,
+        store=True,
+        readonly=False,
+    )
+
+    @api.depends("product_id")
+    def _compute_product_contract_data(self):
+        res = super()._compute_product_contract_data()
+        for rec in self:
+            vals = {"qty_type": False, "qty_formula_id": False}
+            if rec.product_id.is_contract:
+                p = rec.product_id
+                vals = {"qty_type": p.qty_type, "qty_formula_id": p.qty_formula_id.id}
+            rec.update(vals)
+        return res
