@@ -1,11 +1,12 @@
-# Copyright 2018 ACSONE SA/NV
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# Copyright 2024 ACSONE SA/NV
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
 
 from odoo import api, fields, models
 
 
-class ProductTemplate(models.Model):
-    _inherit = "product.template"
+class SaleOrderLineContractMixin(models.AbstractModel):
+    _inherit = "sale.order.line.contract.mixin"
 
     qty_type = fields.Selection(
         selection=[
@@ -15,7 +16,8 @@ class ProductTemplate(models.Model):
         required=False,
         default="fixed",
         string="Qty. type",
-        compute="_compute_qty_type",
+        compute="_compute_product_contract_data",
+        precompute=True,
         store=True,
         readonly=False,
     )
@@ -23,18 +25,23 @@ class ProductTemplate(models.Model):
         comodel_name="contract.line.qty.formula",
         string="Qty. formula",
         compute="_compute_qty_formula_id",
+        precompute=True,
         store=True,
         readonly=False,
     )
 
-    @api.depends("is_contract")
-    def _compute_qty_type(self):
+    @api.depends("product_id")
+    def _compute_product_contract_data(self):
+        res = super()._compute_product_contract_data()
         for rec in self:
-            if not rec.is_contract:
-                rec.qty_type = False
+            if rec.product_id.is_contract:
+                rec.qty_type = rec.product_id.qty_type
+        return res
 
     @api.depends("qty_type")
     def _compute_qty_formula_id(self):
         for rec in self:
-            if not rec.qty_type or rec.qty_type == "fixed":
+            if rec.qty_type and rec.qty_type == "variable":
+                rec.qty_formula_id = rec.product_id.qty_formula_id
+            else:
                 rec.qty_formula_id = False
