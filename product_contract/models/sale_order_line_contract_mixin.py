@@ -64,11 +64,13 @@ class SaleOrderLineContractMixin(models.AbstractModel):
         compute="_compute_contract_line_date_start",
         store=True,
         readonly=False,
+        precompute=True,
     )
     date_end = fields.Date(
         compute="_compute_contract_line_date_end",
         store=True,
         readonly=False,
+        precompute=True,
     )
     contract_line_id = fields.Many2one(
         comodel_name="contract.line",

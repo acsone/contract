@@ -202,7 +202,14 @@ class SaleOrderLine(models.Model):
                     start_date = start_date + relativedelta(day=31)
             line.date_start = start_date
 
-    @api.depends("product_id")
+    @api.depends(
+        "product_id",
+        "contract_start_date_method",
+        "date_start",
+        "date_end",
+        "recurring_rule_type",
+        "recurring_invoicing_type",
+    )
     def _compute_name(self):
         res = super()._compute_name()
         for line in self:
