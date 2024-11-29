@@ -16,6 +16,16 @@ class ProductTemplate(models.Model):
         company_dependent=True,
     )
     default_qty = fields.Integer(string="Recurrence Number", default=1)
+    recurrence_interval = fields.Selection(
+        [
+            ("monthly", "Month(s)"),
+            ("quarterly", "Quarter(s)"),
+            ("semesterly", "Semester(s)"),
+            ("yearly", "Year(s)"),
+        ],
+        default="monthly",
+        help="Specify Interval for contract duration.",
+    )
     recurring_rule_type = fields.Selection(
         [
             ("daily", "Day(s)"),

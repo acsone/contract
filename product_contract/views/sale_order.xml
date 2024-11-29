@@ -63,6 +63,7 @@
                 />
                 <group invisible="not is_contract">
                     <field name="recurrence_number" />
+                    <field name="recurrence_interval" />
                     <field name="recurring_rule_type" />
                 </group>
                 <group invisible="not is_contract">
@@ -114,6 +115,7 @@
                     optional="hide"
                 />
                 <field name="recurrence_number" optional="hide" />
+                <field name="recurrence_interval" optional="hide" />
                 <field name="recurring_rule_type" optional="hide" />
                 <field name="recurring_invoicing_type" optional="hide" />
                 <field name="contract_start_date_method" column_invisible="1" />

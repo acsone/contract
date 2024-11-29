@@ -163,26 +163,23 @@ class SaleOrderLine(models.Model):
     def _set_contract_line_start_date(self):
         """Set date start of lines using it's method and the confirmation date."""
         for line in self:
-            if (
-                line.contract_start_date_method == "manual"
-                or line.recurring_rule_type in ["daily", "weekly", "monthlylastday"]
-            ):
+            if line.contract_start_date_method == "manual":
                 continue
             is_end = "end_" in line.contract_start_date_method
             today = fields.Date.today()
             month_period = month = today.month
-            month_nb = MONTH_NB_MAPPING[line.recurring_rule_type]
+            month_nb = MONTH_NB_MAPPING[line.recurrence_interval]
             # The period number is started by 0 to be able to calculate the month
             period_number = (month - 1) // month_nb
-            if line.recurring_rule_type == "yearly":
+            if line.recurrence_interval == "yearly":
                 month_period = 1
-            elif line.recurring_rule_type != "monthly":
+            elif line.recurrence_interval != "monthly":
                 # Checking quarterly and semesterly
                 month_period = period_number * month_nb + 1
             forced_month = 0
-            if line.recurring_rule_type != "monthly":
+            if line.recurrence_interval != "monthly":
                 forced_value = int(
-                    line.product_id[f"force_month_{line.recurring_rule_type}"]
+                    line.product_id[f"force_month_{line.recurrence_interval}"]
                 )
                 if forced_value:
                     # When the selected period is yearly, the period_number field is
@@ -208,6 +205,7 @@ class SaleOrderLine(models.Model):
         "date_start",
         "date_end",
         "recurring_rule_type",
+        "recurrence_interval",
         "recurring_invoicing_type",
     )
     def _compute_name(self):
@@ -230,21 +228,21 @@ class SaleOrderLine(models.Model):
                     )
                     date_text = f"{start_method_label}"
                     if (
-                        line.recurring_rule_type != "monthly"
-                        and line.product_id[f"force_month_{line.recurring_rule_type}"]
+                        line.recurrence_interval != "monthly"
+                        and line.product_id[f"force_month_{line.recurrence_interval}"]
                     ):
                         field_info = dict(
                             self.env["product.template"]
-                            ._fields[f"force_month_{line.recurring_rule_type}"]
+                            ._fields[f"force_month_{line.recurrence_interval}"]
                             .get_description(self.env)
                         )
                         field_selection = dict(field_info.get("selection"))
                         force_month_label = field_selection.get(
-                            line.product_id[f"force_month_{line.recurring_rule_type}"]
+                            line.product_id[f"force_month_{line.recurrence_interval}"]
                         )
                         date_text += f" ({force_month_label})"
                 field_info = dict(
-                    self._fields["recurring_rule_type"].get_description(self.env)
+                    self._fields["recurrence_interval"].get_description(self.env)
                 )
                 field_selection = dict(field_info.get("selection"))
                 recurring_rule_label = field_selection.get(line.recurring_rule_type)
