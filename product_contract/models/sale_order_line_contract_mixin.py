@@ -29,6 +29,20 @@ class SaleOrderLineContractMixin(models.AbstractModel):
         store=True,
         readonly=False,
     )
+    recurrence_interval = fields.Selection(
+        [
+            ("monthly", "Month(s)"),
+            ("quarterly", "Quarter(s)"),
+            ("semesterly", "Semester(s)"),
+            ("yearly", "Year(s)"),
+        ],
+        default="monthly",
+        help="Specify Interval for contract duration.",
+        compute="_compute_product_contract_data",
+        precompute=True,
+        store=True,
+        readonly=False,
+    )
     recurring_rule_type = fields.Selection(
         [
             ("daily", "Day(s)"),
@@ -40,7 +54,7 @@ class SaleOrderLineContractMixin(models.AbstractModel):
             ("yearly", "Year(s)"),
         ],
         default="monthly",
-        string="Recurrence",
+        string="Invoice Every",
         help="Specify Interval for automatic invoice generation.",
         compute="_compute_product_contract_data",
         precompute=True,
@@ -157,6 +171,7 @@ class SaleOrderLineContractMixin(models.AbstractModel):
                 "recurrence_number": 0,
                 "recurring_rule_type": False,
                 "recurring_invoicing_type": False,
+                "recurrence_interval": False,
                 "is_auto_renew": False,
                 "auto_renew_interval": False,
                 "auto_renew_rule_type": False,
@@ -168,6 +183,7 @@ class SaleOrderLineContractMixin(models.AbstractModel):
                     "recurrence_number": p.default_qty,
                     "recurring_rule_type": p.recurring_rule_type,
                     "recurring_invoicing_type": p.recurring_invoicing_type,
+                    "recurrence_interval": p.recurrence_interval,
                     "is_auto_renew": p.is_auto_renew,
                     "auto_renew_interval": p.auto_renew_interval,
                     "auto_renew_rule_type": p.auto_renew_rule_type,
@@ -181,17 +197,10 @@ class SaleOrderLineContractMixin(models.AbstractModel):
             if rec.contract_start_date_method == "manual":
                 rec.date_start = rec.date_start or fields.Date.today()
 
-    @api.depends("date_start", "recurring_rule_type", "recurrence_number")
+    @api.depends("date_start", "recurrence_interval", "recurrence_number")
     def _compute_contract_line_date_end(self):
         for rec in self:
             rec.date_end = rec._get_date_end() if rec.date_start else False
-
-    def _get_auto_renew_rule_type(self):
-        """monthly last day don't make sense for auto_renew_rule_type"""
-        self.ensure_one()
-        if self.recurring_rule_type == "monthlylastday":
-            return "monthly"
-        return self.recurring_rule_type
 
     def _get_date_end(self):
         self.ensure_one()
@@ -199,7 +208,7 @@ class SaleOrderLineContractMixin(models.AbstractModel):
         date_end = (
             self.date_start
             + contract_line_model.get_relative_delta(
-                self._get_auto_renew_rule_type(), self.recurrence_number
+                self.recurrence_interval, self.recurrence_number
             )
             - relativedelta(days=1)
         )
