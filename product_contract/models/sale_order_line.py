@@ -69,7 +69,7 @@ class SaleOrderLine(models.Model):
             "date_end": self.date_end,
             "date_start": self.date_start or fields.Date.today(),
             "recurring_next_date": recurring_next_date,
-            "recurring_interval": 1,
+            "recurring_interval": self.recurring_interval,
             "recurring_invoicing_type": self.recurring_invoicing_type,
             "recurring_rule_type": self.recurring_rule_type,
             "is_auto_renew": self.is_auto_renew,

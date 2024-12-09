@@ -15,6 +15,7 @@ export class ProductContractConfiguratorController extends formView.Controller {
         const {
             product_uom_qty,
             recurrence_number,
+            recurring_interval,
             recurring_rule_type,
             recurrence_interval,
             contract_id,
@@ -31,6 +32,7 @@ export class ProductContractConfiguratorController extends formView.Controller {
                 productContractConfiguration: {
                     product_uom_qty,
                     recurrence_number,
+                    recurring_interval,
                     recurring_rule_type,
                     recurrence_interval,
                     contract_id,
