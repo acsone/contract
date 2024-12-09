@@ -26,6 +26,11 @@ class ProductTemplate(models.Model):
         default="monthly",
         help="Specify Interval for contract duration.",
     )
+    recurring_interval = fields.Integer(
+        default=1,
+        string="Invoice Every",
+        help="Invoice every (Days/Week/Month/Year)",
+    )
     recurring_rule_type = fields.Selection(
         [
             ("daily", "Day(s)"),

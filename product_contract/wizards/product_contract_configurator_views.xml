@@ -13,8 +13,22 @@
                     </group>
                     <separator colspan="4" string="Recurrence Invoicing" />
                     <group>
-                        <field name="recurrence_number" />
+                        <label for="recurrence_number" />
+                        <div class="o_row">
+                            <field name="recurrence_number" />
+                            <field name="recurrence_interval" />
+                        </div>
+                        <field name="recurring_invoicing_type" />
+                    </group>
+                    <group>
+                        <label for="recurring_interval" />
+                        <div class="o_row">
+                            <field name="recurring_interval" />
+                            <field name="recurring_rule_type" />
+                        </div>
                         <field name="contract_start_date_method" />
+                    </group>
+                    <group>
                         <field
                             name="date_start"
                             required="contract_start_date_method == 'manual'"
@@ -23,8 +37,6 @@
                         <field name="is_auto_renew" invisible="not date_end" />
                     </group>
                     <group>
-                        <field name="recurrence_interval" />
-                        <field name="recurring_rule_type" />
                         <field
                             name="date_end"
                             invisible="contract_start_date_method != 'manual'"
@@ -50,9 +62,12 @@
                                 required="is_auto_renew"
                             />
                         </div>
-                        <field name="recurring_invoicing_type" />
                     </group>
-                    <separator colspan="4" string="Contract" />
+                    <separator
+                        colspan="4"
+                        string="Contract"
+                        name="contract_separator"
+                    />
                     <group colspan="2">
                         <field
                             name="contract_id"

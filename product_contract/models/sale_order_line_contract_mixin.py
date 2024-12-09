@@ -43,6 +43,15 @@ class SaleOrderLineContractMixin(models.AbstractModel):
         store=True,
         readonly=False,
     )
+    recurring_interval = fields.Integer(
+        default=1,
+        string="Invoice Every",
+        help="Invoice every (Days/Week/Month/Year)",
+        compute="_compute_product_contract_data",
+        precompute=True,
+        store=True,
+        readonly=False,
+    )
     recurring_rule_type = fields.Selection(
         [
             ("daily", "Day(s)"),
@@ -169,6 +178,7 @@ class SaleOrderLineContractMixin(models.AbstractModel):
         for rec in self:
             vals = {
                 "recurrence_number": 0,
+                "recurring_interval": 0,
                 "recurring_rule_type": False,
                 "recurring_invoicing_type": False,
                 "recurrence_interval": False,
@@ -181,6 +191,7 @@ class SaleOrderLineContractMixin(models.AbstractModel):
                 p = rec.product_id
                 vals = {
                     "recurrence_number": p.default_qty,
+                    "recurring_interval": p.recurring_interval,
                     "recurring_rule_type": p.recurring_rule_type,
                     "recurring_invoicing_type": p.recurring_invoicing_type,
                     "recurrence_interval": p.recurrence_interval,
