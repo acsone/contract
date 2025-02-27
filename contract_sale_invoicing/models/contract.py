@@ -18,9 +18,13 @@ class ContractContract(models.Model):
         for contract in self:
             if not contract.invoicing_sales or not contract.recurring_next_date:
                 continue
-            sales = self.env["sale.order"].search(
+            possible_sales = self.env["sale.order"].search(
                 [
-                    ("analytic_account_id", "=", contract.group_id.id),
+                    (
+                        "order_line.distribution_analytic_account_ids",
+                        "in",
+                        contract.group_id.ids,
+                    ),
                     (
                         "partner_invoice_id",
                         "child_of",
@@ -33,6 +37,13 @@ class ContractContract(models.Model):
                         f"{contract.recurring_next_date} 23:59:59",
                     ),
                 ]
+            )
+            # Only match Sales with exact analytic account
+            sales = possible_sales.filtered(
+                lambda order, analytic_account_id=str(contract.group_id.id): all(
+                    line.analytic_distribution == {analytic_account_id: 100.0}
+                    for line in order.order_line
+                )
             )
             if sales:
                 invoices |= sales._create_invoices()
