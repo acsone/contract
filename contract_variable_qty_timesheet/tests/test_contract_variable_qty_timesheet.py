@@ -2,10 +2,11 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import fields
-from odoo.tests.common import TransactionCase
+
+from odoo.addons.base.tests.common import BaseCommon
 
 
-class TestContractVariableQtyTimesheet(TransactionCase):
+class TestContractVariableQtyTimesheet(BaseCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -56,7 +57,7 @@ class TestContractVariableQtyTimesheet(TransactionCase):
         cls.project = cls.env["project.project"].create(
             {
                 "name": "Test project",
-                "analytic_account_id": cls.analytic_account.id,
+                "account_id": cls.analytic_account.id,
                 "company_id": cls.company.id,
             }
         )
