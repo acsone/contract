@@ -150,9 +150,7 @@ class SaleSubscriptionLine(models.Model):
                 and record.product_id.uom_id
                 and record.sale_subscription_id.partner_id
                 and record.sale_subscription_id.pricelist_id
-                and record.sale_subscription_id.pricelist_id.discount_policy
-                == "without_discount"
-                and self.env.user.has_group("product.group_discount_per_so_line")
+                and self.env.user.has_group("sale.group_discount_per_so_line")
             ):
                 record.discount = 0.0
                 continue
@@ -206,16 +204,17 @@ class SaleSubscriptionLine(models.Model):
         product_currency = product.currency_id
         if rule_id:
             pricelist_item = PricelistItem.browse(rule_id)
-            if pricelist_item.pricelist_id.discount_policy == "without_discount":
+            if pricelist_item.compute_price == "fixed":
                 while (
                     pricelist_item.base == "pricelist"
                     and pricelist_item.base_pricelist_id
-                    and pricelist_item.base_pricelist_id.discount_policy
-                    == "without_discount"
+                    and pricelist_item.compute_price == "fixed"
                 ):
-                    _price, rule_id = pricelist_item.base_pricelist_id.with_context(
-                        uom=uom.id
-                    )._get_product_price_rule(product, qty)
+                    _price, rule_id = (
+                        pricelist_item.base_pricelist_id._get_product_price_rule(
+                            product, qty, uom=uom
+                        )
+                    )
                     pricelist_item = PricelistItem.browse(rule_id)
 
             if pricelist_item.base == "standard_price":
@@ -257,11 +256,6 @@ class SaleSubscriptionLine(models.Model):
         return product_price * uom_factor * cur_factor, currency_id
 
     def _get_display_price(self, product):
-        if self.sale_subscription_id.pricelist_id.discount_policy == "with_discount":
-            return self.sale_subscription_id.pricelist_id._get_product_price(
-                product, self.product_uom_qty or 1.0, uom=self.product_id.uom_id
-            )
-
         final_price, rule_id = self.sale_subscription_id.pricelist_id.with_context(
             partner_id=self.sale_subscription_id.partner_id.id,
             date=fields.Datetime.now(),

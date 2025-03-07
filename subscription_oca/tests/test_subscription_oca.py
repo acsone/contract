@@ -6,10 +6,11 @@ import uuid
 from dateutil.relativedelta import relativedelta
 
 from odoo import exceptions, fields
-from odoo.tests import TransactionCase
+
+from odoo.addons.base.tests.common import BaseCommon
 
 
-class TestSubscriptionOCA(TransactionCase):
+class TestSubscriptionOCA(BaseCommon):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -35,7 +36,6 @@ class TestSubscriptionOCA(TransactionCase):
         cls.pricelist2 = cls.env["product.pricelist"].create(
             {
                 "name": "pricelist for contract test 2",
-                "discount_policy": "with_discount",
             }
         )
         cls.partner = cls.env["res.partner"].create(
@@ -57,7 +57,7 @@ class TestSubscriptionOCA(TransactionCase):
                 "name": "10% Tax incl",
                 "amount_type": "percent",
                 "amount": 10,
-                "price_include": True,
+                "price_include_override": "tax_included",
             }
         )
         cls.tax_0pc = cls.env["account.tax"].create(
@@ -526,12 +526,9 @@ class TestSubscriptionOCA(TransactionCase):
         sale_order.get_next_interval(
             self.tmpl1.recurring_rule_type, self.tmpl1.recurring_interval
         )
-        self.sub_line.sale_subscription_id.pricelist_id.discount_policy = (
-            "without_discount"
-        )
         self.sub_line.product_uom_qty = 100
         self.env.user.groups_id = [
-            (4, self.env.ref("product.group_discount_per_so_line").id)
+            (4, self.env.ref("sale.group_discount_per_so_line").id)
         ]
         disc = self.sub_line.read(["discount"])
         self.assertEqual(disc[0]["discount"], 0)
@@ -591,7 +588,6 @@ class TestSubscriptionOCA(TransactionCase):
         self.assertEqual(res[0]["discount"], 100)
 
     def test_x_subscription_oca_pricelist_related_2(self):
-        self.pricelist_l3.discount_policy = "without_discount"
         self.pricelist_l3.currency_id = self.env.ref("base.THB")
         self.sub_line.sale_subscription_id.pricelist_id = self.pricelist_l3
         res = self.sub_line._get_display_price(self.product_1)
@@ -649,34 +645,20 @@ class TestSubscriptionOCA(TransactionCase):
         inv_ids = self.env["account.move"].search(
             [("subscription_id", "=", subscription.id)]
         )
-        # self.assertEqual(len(inv_ids), 2)
-        # self.assertEqual(sum(inv_ids.mapped("amount_total")), 2 * 30.75)
-        # self.assertEqual(subscription.account_invoice_ids_count, 2)
         test_res.append(len(inv_ids))
         test_res.append(sum(inv_ids.mapped("amount_total")))
         test_res.append(subscription.account_invoice_ids_count)
         res = subscription.action_view_account_invoice_ids()
-        # self.assertEqual(res["type"], "ir.actions.act_window")
-        # self.assertEqual(subscription.sale_order_ids_count, 1)
         test_res.append(res["type"])
         test_res.append(subscription.sale_order_ids_count)
         subscription.action_view_sale_order_ids()
-        # self.assertIn(str(subscription.sale_order_ids.id), str(res["domain"]))
         test_res.append(subscription.sale_order_ids.id)
         subscription.calculate_recurring_next_date(fields.Datetime.now())
-        # self.assertEqual(
-        #     subscription.recurring_next_date,
-        #     fields.Date.today() + relativedelta(months=1),
-        # )
         test_res.append(subscription.recurring_next_date)
         subscription.partner_id = self.partner_2
         subscription.onchange_partner_id()
-        # self.assertEqual(
-        #     subscription.pricelist_id.id, self.partner_2.property_product_pricelist.id
-        # )
         test_res.append(subscription.pricelist_id.id)
         subscription.onchange_partner_id_fpos()
-        # self.assertFalse(subscription.fiscal_position_id)
         test_res.append(subscription.fiscal_position_id)
         res = subscription.action_close_subscription()
         self.assertEqual(res["type"], "ir.actions.act_window")

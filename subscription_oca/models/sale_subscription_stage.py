@@ -1,6 +1,6 @@
 # Copyright 2023 Domatix - Carlos Martínez
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import ValidationError
 
 
@@ -26,7 +26,9 @@ class SaleSubscriptionStage(models.Model):
             [("type", "=", "post")]
         )
         if len(post_stages) > 1:
-            raise ValidationError(_("There is already a Closed-type stage declared"))
+            raise ValidationError(
+                self.env._("There is already a Closed-type stage declared")
+            )
 
     @api.depends("name")
     def _compute_display_name(self):

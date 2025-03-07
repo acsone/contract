@@ -5,7 +5,7 @@ from datetime import date, datetime
 
 from dateutil.relativedelta import relativedelta
 
-from odoo import _, api, fields, models
+from odoo import api, fields, models
 from odoo.exceptions import AccessError
 
 logger = logging.getLogger(__name__)
@@ -272,10 +272,9 @@ class SaleSubscription(models.Model):
         return values
 
     def create_invoice(self):
-        if not self.env["account.move"].check_access_rights("create", False):
+        if not self.env["account.move"].has_access("create"):
             try:
-                self.check_access_rights("write")
-                self.check_access_rule("write")
+                self.check_access("write")
             except AccessError:
                 return self.env["account.move"]
         line_ids = []
@@ -293,10 +292,9 @@ class SaleSubscription(models.Model):
         return invoice_id
 
     def create_sale_order(self):
-        if not self.env["sale.order"].check_access_rights("create", False):
+        if not self.env["sale.order"].has_access("create"):
             try:
-                self.check_access_rights("write")
-                self.check_access_rule("write")
+                self.check_access("write")
             except AccessError:
                 return self.env["sale.order"]
         line_ids = []
@@ -310,14 +308,15 @@ class SaleSubscription(models.Model):
 
     def generate_invoice(self):
         invoice_number = ""
-        msg_static = _("Created invoice with reference")
+        message_body = ""
+        msg_static = self.env._("Created invoice with reference")
         if self.template_id.invoicing_mode in ["draft", "invoice", "invoice_send"]:
             invoice = self.create_invoice()
             if self.template_id.invoicing_mode != "draft":
                 invoice.action_post()
                 mail_template = self.template_id.invoice_mail_template_id
-                invoice.with_context(force_send=True)._generate_pdf_and_send_invoice(
-                    mail_template
+                self.env["account.move.send"]._generate_and_send_invoices(
+                    invoice, mail_template=mail_template, sending_methods=["email"]
                 )
                 invoice_number = invoice.name
                 message_body = (
@@ -340,7 +339,7 @@ class SaleSubscription(models.Model):
                 % (msg_static, new_invoice.id, invoice_number)
             )
         if not invoice_number:
-            invoice_number = _("To validate")
+            invoice_number = self.env._("To validate")
             message_body = f"<b>{msg_static}</b> {invoice_number}"
         self.calculate_recurring_next_date(self.recurring_next_date)
         self.message_post(body=message_body)
@@ -354,7 +353,7 @@ class SaleSubscription(models.Model):
             "name": self.name,
             "views": [
                 (self.env.ref("account.view_move_form").id, "form"),
-                (self.env.ref("account.view_move_tree").id, "tree"),
+                (self.env.ref("account.view_move_tree").id, "list"),
             ],
             "view_type": "form",
             "view_mode": "form",
@@ -375,11 +374,11 @@ class SaleSubscription(models.Model):
         return {
             "name": self.name,
             "views": [
-                (self.env.ref("account.view_move_tree").id, "tree"),
+                (self.env.ref("account.view_move_tree").id, "list"),
                 (self.env.ref("account.view_move_form").id, "form"),
             ],
             "view_type": "form",
-            "view_mode": "tree,form",
+            "view_mode": "list,form",
             "res_model": "account.move",
             "type": "ir.actions.act_window",
             "domain": [
@@ -406,7 +405,7 @@ class SaleSubscription(models.Model):
         return {
             "name": self.name,
             "view_type": "form",
-            "view_mode": "tree,form",
+            "view_mode": "list,form",
             "res_model": "sale.order",
             "type": "ir.actions.act_window",
             "domain": [("id", "in", active_ids)],
