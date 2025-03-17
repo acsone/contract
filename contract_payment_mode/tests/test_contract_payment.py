@@ -52,7 +52,7 @@ class TestContractPaymentInit(common.TransactionCase):
         cls.partner = cls.env["res.partner"].create(
             {
                 "name": "Test contract partner",
-                "customer_payment_mode_id": cls.payment_mode,
+                "customer_payment_mode_id": cls.payment_mode.id,
             }
         )
         cls.product = cls.env["product.product"].create(
