@@ -1,0 +1,3 @@
+odoo-addon-contract @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract
+odoo-addon-account_payment_partner @ git+https://github.com/OCA/bank-payment.git@refs/pull/1439/head#subdirectory=account_payment_partner
+odoo-addon-account_payment_mode @ git+https://github.com/OCA/bank-payment.git@refs/pull/1438/head#subdirectory=account_payment_mode
