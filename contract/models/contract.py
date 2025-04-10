@@ -306,11 +306,13 @@ class ContractContract(models.Model):
             action["views"] = [(tree_view.id, "list"), (form_view.id, "form")]
         return action
 
-    @api.depends("contract_line_ids.date_end")
+    @api.depends("contract_line_ids.date_end", "contract_line_ids.state")
     def _compute_date_end(self):
         for contract in self:
             contract.date_end = False
-            date_end = contract.contract_line_ids.mapped("date_end")
+            date_end = contract.contract_line_ids.filtered(
+                lambda line: line.state != "canceled"
+            ).mapped("date_end")
             if date_end and all(date_end):
                 contract.date_end = max(date_end)
 
