@@ -46,7 +46,10 @@
         "views/contract_portal_templates.xml",
     ],
     "assets": {
-        "web.assets_frontend": ["contract/static/src/scss/frontend.scss"],
+        "web.assets_frontend": [
+            "contract/static/src/scss/frontend.scss",
+            "contract/static/src/js/contract_portal_sidebar.esm.js",
+        ],
         "web.assets_tests": ["contract/static/src/js/contract_portal_tour.esm.js"],
     },
     "installable": True,
