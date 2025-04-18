@@ -1344,7 +1344,7 @@ class TestContract(TestContractBase):
         purchase_tree_view = self.env.ref("contract.contract_line_supplier_tree_view")
         purchase_form_view = self.env.ref("contract.contract_line_supplier_form_view")
         view = self.acct_line.with_context(default_contract_type="purchase").get_view(
-            view_type="tree"
+            view_type="list"
         )
         self.assertEqual(view["id"], purchase_tree_view.id)
         view = self.acct_line.with_context(default_contract_type="purchase").get_view(
