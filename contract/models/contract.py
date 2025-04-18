@@ -372,7 +372,9 @@ class ContractContract(models.Model):
             record.with_context(skip_modification_mail=True).write(
                 {
                     "modification_ids": [
-                        (0, 0, {"date": date_start, "description": _("Contract start")})
+                        Command.create(
+                            {"date": date_start, "description": _("Contract start")}
+                        )
                     ]
                 }
             )
@@ -597,7 +599,7 @@ class ContractContract(models.Model):
                     )
             invoices_values.append(invoice_vals)
             # Force the recomputation of journal items
-            contract_lines._update_recurring_next_date()
+            contract_lines._update_last_date_invoiced()
         return invoices_values
 
     @api.model
