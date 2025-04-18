@@ -4,6 +4,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 
+import warnings
+
 from dateutil.relativedelta import relativedelta
 
 from odoo import _, api, fields, models
@@ -236,8 +238,15 @@ class ContractLine(models.Model):
         return name
 
     def _update_recurring_next_date(self):
-        # FIXME: Change method name according to real updated field
-        # e.g.: _update_last_date_invoiced()
+        warnings.warn(
+            "Deprecated _update_recurring_next_date, "
+            "use _update_last_date_invoiced instead",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        return self._update_last_date_invoiced()
+
+    def _update_last_date_invoiced(self):
         for rec in self:
             last_date_invoiced = rec.next_period_date_end
             rec.write(
@@ -249,7 +258,7 @@ class ContractLine(models.Model):
     @api.model
     def get_view(self, view_id=None, view_type="form", **options):
         default_contract_type = self.env.context.get("default_contract_type")
-        if view_type == "tree" and default_contract_type == "purchase":
+        if view_type == "list" and default_contract_type == "purchase":
             view_id = self.env.ref("contract.contract_line_supplier_tree_view").id
         if view_type == "form":
             if default_contract_type == "purchase":
