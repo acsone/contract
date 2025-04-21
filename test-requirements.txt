@@ -1,0 +1,2 @@
+odoo-addon-contract @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract
+odoo-addon-contract-variable-quantity @ git+https://github.com/OCA/contract.git@refs/pull/1139/head#subdirectory=contract_variable_quantity
