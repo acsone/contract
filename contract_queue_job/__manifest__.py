@@ -6,11 +6,14 @@
     "summary": """
         This addon make contract invoicing cron plan each contract in a job
         instead of creating all invoices in one transaction""",
-    "version": "12.0.1.1.0",
+    "version": "18.0.1.0.0",
     "license": "AGPL-3",
-    "author": "ACSONE SA/NV,"
-              "Odoo Community Association (OCA)",
+    "author": "ACSONE SA/NV," "Odoo Community Association (OCA)",
     "website": "https://github.com/OCA/contract",
-    "depends": ['contract', 'queue_job'],
+    "depends": ["contract_line_successor", "queue_job"],
     "maintainers": ["sbejaoui"],
+    "data": [
+        "data/queue_job_channel.xml",
+        "data/queue_job_function.xml",
+    ],
 }
