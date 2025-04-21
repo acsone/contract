@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 from odoo import fields
 
 from odoo.addons.contract.tests.test_contract import TestContractBase
-from odoo.addons.queue_job.tests.common import JobMixin
+from odoo.addons.queue_job.tests.common import JobMixin, trap_jobs
 
 
 class TestContractLineQueueJob(TestContractBase, JobMixin):
@@ -18,18 +18,22 @@ class TestContractLineQueueJob(TestContractBase, JobMixin):
 
     def test_contract_renew_queue_job_1(self):
         """Only one line, task is run without delay"""
-        line = self.contract2.mapped("contract_line_ids")
+        line = self.contract2.contract_line_ids
         line.date_end = fields.Date.today()
-        res = line.renew()
-        self.assertTrue(line.date_end < res.date_start)
+        with trap_jobs() as trap:
+            line.renew()
+            self.assertEqual(trap.jobs_count(), 0)
+        self.assertNotEqual(line.date_end, fields.Date.today())
 
     def test_contract_renew_queue_job_2(self):
         """Two lines, two jobs are created."""
         contracts = self.contract2 | self.contract3
-        lines = contracts.mapped("contract_line_ids")
-        job_counter = self.job_counter()
-        lines.renew()
-        self.assertEqual(job_counter.count_created(), len(lines))
+        lines = contracts.contract_line_ids
+        with trap_jobs() as trap:
+            lines.renew()
+            self.assertEqual(trap.jobs_count(), 2)
+            trap.assert_enqueued_job(lines[0].renew)
+            trap.assert_enqueued_job(lines[1].renew)
 
     def test_contract_renew_queue_job_3(self):
         """wrong ir_config_parameter : no job"""
