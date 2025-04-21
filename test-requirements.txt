@@ -1,0 +1,2 @@
+odoo-addon-contract @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract
+odoo-addon-contract-payment-mode @ git+https://github.com/OCA/contract.git@refs/pull/1212/head#subdirectory=contract_payment_mode
