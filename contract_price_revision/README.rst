@@ -78,12 +78,12 @@ Authors
 Contributors
 ------------
 
-- `Tecnativa <https://www.tecnativa.com>`__:
+-  `Tecnativa <https://www.tecnativa.com>`__:
 
-  - Vicent Cubells
-  - Carlos Dauden
-  - Carolina Fernandez
-  - Juan José Seguí
+   -  Vicent Cubells
+   -  Carlos Dauden
+   -  Carolina Fernandez
+   -  Juan José Seguí
 
 Maintainers
 -----------
