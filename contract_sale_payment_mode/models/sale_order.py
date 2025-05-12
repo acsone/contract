@@ -30,7 +30,6 @@ class SaleOrder(models.Model):
             self.payment_mode_id = False
         return res
 
-    @api.multi
     def _prepare_contract_value(self, contract_template):
         self.ensure_one()
         vals = super()._prepare_contract_value(contract_template)
