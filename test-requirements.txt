@@ -1,0 +1,1 @@
+odoo-addon-product-contract @ git+https://github.com/OCA/contract.git@refs/pull/1137/head#subdirectory=product_contract
