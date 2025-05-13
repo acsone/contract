@@ -20,11 +20,11 @@ class SaleOrder(models.Model):
     )
 
     @api.onchange("partner_id")
-    def onchange_partner_id(self):
-        res = super().onchange_partner_id()
+    def _onchange_partner_id(self):
+        res = super()._onchange_partner_id()
         if self.partner_id:
-            self.contract_payment_mode_id = self.partner_id.with_context(
-                force_company=self.company_id.id
+            self.contract_payment_mode_id = self.partner_id.with_company(
+                self.company_id
             ).customer_payment_mode_id
         else:
             self.payment_mode_id = False

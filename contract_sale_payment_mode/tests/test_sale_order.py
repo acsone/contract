@@ -14,7 +14,7 @@ class TestSaleOrderPaymentMode(TestSaleOrder):
     def test_action_confirm_with_payment_mode(self):
         self.test_action_confirm()
         self.assertEqual(
-            self.sale.order_line.mapped("contract_id.payment_term_id"),
+            self.sale.order_line.mapped("contract_id.payment_mode_id"),
             self.payment_mode,
         )
 
@@ -23,7 +23,7 @@ class TestSaleOrderPaymentMode(TestSaleOrder):
         self.sale.contract_payment_mode_id = self.contract_payment_mode_id
         self.test_action_confirm()
         self.assertEqual(
-            self.sale.order_line.mapped("contract_id.payment_term_id"),
+            self.sale.order_line.mapped("contract_id.payment_mode_id"),
             self.payment_mode,
         )
 
@@ -33,6 +33,6 @@ class TestSaleOrderPaymentMode(TestSaleOrder):
         self.sale.company_id.specific_contract_payment_mode = True
         self.test_action_confirm()
         self.assertEqual(
-            self.sale.order_line.mapped("contract_id.payment_term_id"),
+            self.sale.order_line.mapped("contract_id.payment_mode_id"),
             self.contract_payment_mode_id,
         )

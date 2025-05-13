@@ -14,6 +14,7 @@
         "account_payment_sale",
         # OCA/contract
         "product_contract",
+        "contract_payment_mode",
     ],
     "data": ["views/res_config_settings.xml", "views/sale_order.xml"],
 }
