@@ -248,7 +248,10 @@
                                     />
                                     <field name="date_start" required="1" />
                                     <field name="date_end" />
-                                    <field name="recurring_next_date" required="1" />
+                                    <field
+                                        name="recurring_next_date"
+                                        required="next_period_date_end"
+                                    />
                                     <field
                                         name="last_date_invoiced"
                                         groups="base.group_no_one"
