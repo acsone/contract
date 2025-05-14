@@ -23,12 +23,7 @@ class ContractContract(models.Model):
     _name = "contract.contract"
     _description = "Contract"
     _order = "code, name asc"
-    _inherit = [
-        "mail.thread",
-        "mail.activity.mixin",
-        "contract.template",
-        "portal.mixin",
-    ]
+    _inherit = ["contract.template", "portal.mixin"]
 
     # === Basic Information ===
     active = fields.Boolean(default=True)

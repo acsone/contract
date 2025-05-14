@@ -12,7 +12,7 @@ from odoo import api, fields, models
 class ContractTemplate(models.Model):
     _name = "contract.template"
     _description = "Contract Template"
-    _inherit = "contract.recurring.mixin"
+    _inherit = ["contract.recurring.mixin", "mail.thread", "mail.activity.mixin"]
     _check_company_auto = True
 
     # Fields not synced to the actual contract
