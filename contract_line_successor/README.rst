@@ -37,48 +37,47 @@ Contract Line Successor
 Features
 --------
 
--  **Successor and Predecessor Management**
+- **Successor and Predecessor Management**
 
-   -  Link contract lines with successor and predecessor lines.
-   -  Plan successors automatically or manually after a stop or
-      suspension.
+  - Link contract lines with successor and predecessor lines.
+  - Plan successors automatically or manually after a stop or
+    suspension.
 
--  **Contract Line Lifecycle States**
+- **Contract Line Lifecycle States**
 
-   -  Manage contract lines with the following computed states:
+  - Manage contract lines with the following computed states:
 
-      -  ``Upcoming``
-      -  ``In-Progress``
-      -  ``To Renew``
-      -  ``Upcoming Close``
-      -  ``Closed``
-      -  ``Canceled``
+    - ``Upcoming``
+    - ``In-Progress``
+    - ``To Renew``
+    - ``Upcoming Close``
+    - ``Closed``
+    - ``Canceled``
 
--  **Lifecycle Operations**
+- **Lifecycle Operations**
 
-   -  Stop a contract line.
-   -  Plan a successor for a contract line.
-   -  Stop and plan a successor in one operation (useful for
-      suspensions).
-   -  Cancel and un-cancel contract lines.
-   -  Renew contract lines automatically (new line or extension).
+  - Stop a contract line.
+  - Plan a successor for a contract line.
+  - Stop and plan a successor in one operation (useful for suspensions).
+  - Cancel and un-cancel contract lines.
+  - Renew contract lines automatically (new line or extension).
 
--  **Auto-Renewal Handling**
+- **Auto-Renewal Handling**
 
-   -  Auto-renewal based on company settings (extend existing line or
-      create a new one).
-   -  Cron job to automate renewal of eligible contract lines.
+  - Auto-renewal based on company settings (extend existing line or
+    create a new one).
+  - Cron job to automate renewal of eligible contract lines.
 
--  **Data Integrity and Validation**
+- **Data Integrity and Validation**
 
-   -  Prevent invalid successor or predecessor configurations.
-   -  Validate state transitions and date overlaps.
-   -  Ensure clean renewal and cancellation workflows.
+  - Prevent invalid successor or predecessor configurations.
+  - Validate state transitions and date overlaps.
+  - Ensure clean renewal and cancellation workflows.
 
--  **Audit Trail**
+- **Audit Trail**
 
-   -  Automatic posting of chatter messages for lifecycle events like
-      stops, renewals, suspensions, cancellations, etc.
+  - Automatic posting of chatter messages for lifecycle events like
+    stops, renewals, suspensions, cancellations, etc.
 
 **Table of contents**
 
@@ -88,19 +87,18 @@ Features
 Configuration
 =============
 
--  | **Auto-Renewal Strategy**
-   | In the company settings, define whether renewing a contract line:
+- | **Auto-Renewal Strategy**
+  | In the company settings, define whether renewing a contract line:
 
-   -  Extends the current line (updates ``date_end``),
-   -  or creates a new successor contract line.
+  - Extends the current line (updates ``date_end``),
+  - or creates a new successor contract line.
 
-   | Field:
-   | ``Company > Configuration > Contracts > Create new contract line at renewal``
+  | Field:
+  | ``Company > Configuration > Contracts > Create new contract line at renewal``
 
--  | **Scheduled Actions**
-   | Ensure the scheduled action ``Contract Line: Auto Renew`` is
-     activated if you want automatic renewal without manual
-     intervention.
+- | **Scheduled Actions**
+  | Ensure the scheduled action ``Contract Line: Auto Renew`` is
+    activated if you want automatic renewal without manual intervention.
 
 Usage
 =====
@@ -110,12 +108,12 @@ Usage
 2. Once enabled, you will have access to several actions at the contract
    line level:
 
-   -  **Stop** a contract line and optionally **plan a successor**.
-   -  **Handle temporary suspensions** and **resume** the contract line
-      after the suspension period.
-   -  **Cancel** and **un-cancel** contract lines if necessary.
-   -  **Renew** contract lines either by **extending** the current line
-      or by **creating a new successor line** automatically.
+   - **Stop** a contract line and optionally **plan a successor**.
+   - **Handle temporary suspensions** and **resume** the contract line
+     after the suspension period.
+   - **Cancel** and **un-cancel** contract lines if necessary.
+   - **Renew** contract lines either by **extending** the current line
+     or by **creating a new successor line** automatically.
 
 Bug Tracker
 ===========
@@ -138,7 +136,7 @@ Authors
 Contributors
 ------------
 
--  Souheil Bejaoui souheil.bejaoui@acsone.eu (ACSONE SA/NV)
+- Souheil Bejaoui souheil.bejaoui@acsone.eu (ACSONE SA/NV)
 
 Maintainers
 -----------

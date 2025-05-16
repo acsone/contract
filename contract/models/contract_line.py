@@ -40,6 +40,7 @@ class ContractLine(models.Model):
         store=True,
         readonly=True,
     )
+    product_id = fields.Many2one(index=True)
 
     @api.model
     def _compute_first_recurring_next_date(
@@ -307,3 +308,11 @@ class ContractLine(models.Model):
                 line.price_unit = pricelist._get_product_price(product, quantity=1)
             else:
                 line.price_unit = line.specific_price
+
+    @api.constrains("is_auto_renew", "auto_renew_interval")
+    def _check_auto_renew_interval(self):
+        for rec in self:
+            if rec.is_auto_renew and not rec.auto_renew_interval:
+                raise ValidationError(
+                    _("Auto renew interval should be different then 0")
+                )
