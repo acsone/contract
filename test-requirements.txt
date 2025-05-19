@@ -1,0 +1,2 @@
+odoo-addon-contract @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract
+odoo-addon-account-invoice-transmit-method @ git+https://github.com/OCA/account-invoicing.git@refs/pull/1842/head#subdirectory=account_invoice_transmit_method
