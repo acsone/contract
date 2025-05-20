@@ -1,0 +1,5 @@
+#OCA/contract
+odoo-addon-contract-transmit-method @ git+https://github.com/OCA/contract.git@refs/pull/1236/head#subdirectory=contract_transmit_method
+
+# OCA/sale-workflow
+odoo-addon-sale-order-transmit-method @ git+https://github.com/OCA/sale-workflow.git@refs/pull/3728/head#subdirectory=sale_order_transmit_method
