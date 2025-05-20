@@ -1,0 +1,13 @@
+# OCA/account-invoicing
+odoo-addon-account-invoice-transmit-method @ git+https://github.com/OCA/account-invoicing.git@refs/pull/1842/head#subdirectory=account_invoice_transmit_method
+
+
+#OCA/contract
+odoo-addon-contract @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract
+odoo-addon-contract-line-successor @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract_line_successor
+odoo-addon-contract-termination @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract_termination
+odoo-addon-product-contract @ git+https://github.com/OCA/contract.git@refs/pull/1137/head#subdirectory=product_contract
+odoo-addon-contract-transmit-method @ git+https://github.com/OCA/contract.git@refs/pull/1236/head#subdirectory=contract_transmit_method
+
+# OCA/sale-workflow
+odoo-addon-sale-order-transmit-method @ git+https://github.com/OCA/sale-workflow.git@refs/pull/3728/head#subdirectory=sale_order_transmit_method
