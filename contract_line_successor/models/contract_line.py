@@ -4,6 +4,7 @@
 from datetime import timedelta
 
 from dateutil.relativedelta import relativedelta
+from markupsafe import Markup
 
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
@@ -433,11 +434,13 @@ class ContractLine(models.Model):
                         rec._prepare_value_for_stop(date_end, manual_renew_needed)
                     )
                     if post_message:
-                        msg = _(
-                            """Contract line for <strong>%(product)s</strong>
+                        msg = Markup(
+                            _(
+                                """Contract line for <strong>%(product)s</strong>
                             stopped: <br/>
                             - <strong>End</strong>: %(old_end)s -- %(new_end)s
                             """
+                            )
                         ) % {
                             "product": rec.name,
                             "old_end": old_date_end,
@@ -507,13 +510,15 @@ class ContractLine(models.Model):
             rec.successor_contract_line_id = new_line
             contract_line |= new_line
             if post_message:
-                msg = _(
-                    """Contract line for <strong>%(product)s</strong>
+                msg = Markup(
+                    _(
+                        """Contract line for <strong>%(product)s</strong>
                     planned a successor: <br/>
                     - <strong>Start</strong>: %(new_date_start)s
                     <br/>
                     - <strong>End</strong>: %(new_date_end)s
                     """
+                    )
                 ) % {
                     "product": rec.name,
                     "new_date_start": new_line.date_start,
@@ -610,13 +615,15 @@ class ContractLine(models.Model):
                         is_auto_renew,
                         post_message=False,
                     )
-            msg = _(
-                """Contract line for <strong>%(product)s</strong>
+            msg = Markup(
+                _(
+                    """Contract line for <strong>%(product)s</strong>
                 suspended: <br/>
                 - <strong>Suspension Start</strong>: %(new_date_start)s
                 <br/>
                 - <strong>Suspension End</strong>: %(new_date_end)s
                 """
+                )
             ) % {
                 "product": rec.name,
                 "new_date_start": date_start,
@@ -630,11 +637,13 @@ class ContractLine(models.Model):
             raise ValidationError(_("Cancel not allowed for this line"))
         for contract in self.mapped("contract_id"):
             lines = self.filtered(lambda line, c=contract: line.contract_id == c)
-            msg = _(
-                "Contract line canceled: %s",
-                "<br/>- ".join(
-                    [f"<strong>{name}</strong>" for name in lines.mapped("name")]
-                ),
+            msg = Markup(
+                _(
+                    "Contract line canceled: %s",
+                    "<br/>- ".join(
+                        [f"<strong>{name}</strong>" for name in lines.mapped("name")]
+                    ),
+                )
             )
             contract.message_post(body=msg)
         self.mapped("predecessor_contract_line_id").write(
@@ -647,11 +656,13 @@ class ContractLine(models.Model):
             raise ValidationError(_("Un-cancel not allowed for this line"))
         for contract in self.mapped("contract_id"):
             lines = self.filtered(lambda line, c=contract: line.contract_id == c)
-            msg = _(
-                "Contract line Un-canceled: %s",
-                "<br/>- ".join(
-                    [f"<strong>{name}</strong>" for name in lines.mapped("name")]
-                ),
+            msg = Markup(
+                _(
+                    "Contract line Un-canceled: %s",
+                    "<br/>- ".join(
+                        [f"<strong>{name}</strong>" for name in lines.mapped("name")]
+                    ),
+                )
             )
             contract.message_post(body=msg)
         for rec in self:
@@ -777,13 +788,15 @@ class ContractLine(models.Model):
             else:
                 new_line = rec._renew_extend_line(date_end)
             res |= new_line
-            msg = _(
-                """Contract line for <strong>%(product)s</strong>
+            msg = Markup(
+                _(
+                    """Contract line for <strong>%(product)s</strong>
                 renewed: <br/>
                 - <strong>Start</strong>: %(new_date_start)s
                 <br/>
                 - <strong>End</strong>: %(new_date_end)s
                 """
+                )
             ) % {
                 "product": rec.name,
                 "new_date_start": date_start,
