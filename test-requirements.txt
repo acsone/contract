@@ -1,0 +1,11 @@
+# OCA/contract
+odoo-addon-contract @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract
+odoo-addon-contract-termination @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract_termination
+odoo-addon-contract-line-successor @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract_line_successor
+
+odoo-addon-contract-mandate @ git+https://github.com/OCA/contract.git@refs/pull/1228/head#subdirectory=contract_mandate
+odoo-addon-product-contract @ git+https://github.com/OCA/contract.git@refs/pull/1137/head#subdirectory=product_contract
+odoo-addon-contract-payment-mode @ git+https://github.com/OCA/contract.git@refs/pull/1212/head#subdirectory=contract_payment_mode
+
+# OCA/bank-payment
+odoo-addon-account-banking-mandate-sale @ git+https://github.com/OCA/bank-payment.git@refs/pull/1456/head#subdirectory=account_banking_mandate_sale
