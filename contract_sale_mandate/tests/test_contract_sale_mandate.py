@@ -37,7 +37,7 @@ class TestContractSaleMandate(TestContractBase):
         )
         cls.sale.mandate_id = cls.mandate
         cls.order_line1 = cls.sale.order_line.filtered(
-            lambda l: l.product_id == cls.product1
+            lambda line: line.product_id == cls.product1
         )
 
     def test_01(self):
