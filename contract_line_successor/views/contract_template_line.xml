@@ -10,7 +10,6 @@
                 <page string="Renewal" name="renewal" invisible="display_type">
                     <group>
                         <field name="is_auto_renew" />
-                        <field name="is_canceled" invisible="1" />
                     </group>
                     <group invisible="not is_auto_renew">
                         <group>

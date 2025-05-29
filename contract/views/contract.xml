@@ -6,7 +6,6 @@
         <field name="model">contract.contract</field>
         <field name="arch" type="xml">
             <form>
-                <field name="company_id" invisible="1" />
                 <header>
                     <button
                         name="action_contract_send"
@@ -25,7 +24,6 @@
                     <button type="object" string="Preview" name="action_preview" />
                 </header>
                 <sheet string="Contract">
-                    <field name="active" invisible="1" />
                     <div class="oe_button_box" name="button_box">
                         <button
                             name="action_show_invoices"
@@ -59,7 +57,6 @@
                     </div>
                     <group name="main">
                         <group>
-                            <field name="commercial_partner_id" invisible="1" />
                             <field name="partner_id" required="1" />
                             <field name="user_id" />
                         </group>
@@ -257,10 +254,6 @@
                                         groups="base.group_no_one"
                                         optional="hide"
                                     />
-                                    <field
-                                        name="create_invoice_visibility"
-                                        column_invisible="True"
-                                    />
                                 </list>
                             </field>
                             <field name="note" />
@@ -321,8 +314,6 @@
                                     groups="base.group_multi_currency"
                                 />
                             </group>
-
-                            <field name="create_invoice_visibility" invisible="1" />
 
                             <group
                                 string="Legend (for the markers inside invoice lines description)"
@@ -417,7 +408,6 @@
                     widget="many2many_tags"
                     options="{'color_field': 'color'}"
                 />
-                <field name="active" column_invisible="True" />
                 <field name="company_id" groups="base.group_multi_company" />
             </list>
         </field>
