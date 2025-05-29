@@ -9,7 +9,7 @@ from collections import namedtuple
 from dateutil.relativedelta import relativedelta
 from freezegun import freeze_time
 
-from odoo import fields
+from odoo import Command, fields
 from odoo.exceptions import ValidationError
 from odoo.tests import Form, common
 
@@ -56,8 +56,8 @@ class TestContractBase(common.TransactionCase):
         cls.template_vals = {
             "name": "Test Contract Template",
             "contract_line_ids": [
-                (0, 0, cls.section_template_vals),
-                (0, 0, cls.line_template_vals),
+                Command.create(cls.section_template_vals),
+                Command.create(cls.line_template_vals),
             ],
         }
         cls.template = cls.env["contract.template"].create(cls.template_vals)
@@ -86,9 +86,7 @@ class TestContractBase(common.TransactionCase):
                 "line_recurrence": True,
                 "contract_type": "purchase",
                 "contract_line_ids": [
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "product_id": cls.product_1.id,
                             "name": "Services from #START# to #END#",
@@ -130,18 +128,14 @@ class TestContractBase(common.TransactionCase):
                 "recurring_rule_type": "monthly",
                 "date_start": "2018-02-15",
                 "contract_line_ids": [
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "product_id": False,
                             "name": "Header for #INVOICEMONTHNAME# Services",
                             "display_type": "line_section",
                         },
                     ),
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "product_id": False,
                             "name": "Services from #START# to #END#",
@@ -149,9 +143,7 @@ class TestContractBase(common.TransactionCase):
                             "price_unit": 100,
                         },
                     ),
-                    (
-                        0,
-                        0,
+                    Command.create(
                         {
                             "product_id": False,
                             "name": "Line",
@@ -214,8 +206,12 @@ class TestContract(TestContractBase):
         self.contract.write(
             {
                 "modification_ids": [
-                    (0, 0, {"date": "2020-01-01", "description": "Modification 1"}),
-                    (0, 0, {"date": "2020-02-01", "description": "Modification 2"}),
+                    Command.create(
+                        {"date": "2020-01-01", "description": "Modification 1"}
+                    ),
+                    Command.create(
+                        {"date": "2020-02-01", "description": "Modification 2"}
+                    ),
                 ]
             }
         )
@@ -512,10 +508,10 @@ class TestContract(TestContractBase):
         self.contract._onchange_contract_template_id()
         res = {
             "contract_line_ids": [
-                (0, 0, {"display_type": "line_section", "name": "Test section"}),
-                (
-                    0,
-                    0,
+                Command.create(
+                    {"display_type": "line_section", "name": "Test section"}
+                ),
+                Command.create(
                     {
                         "product_id": self.product_1.id,
                         "name": "Services from #START# to #END#",

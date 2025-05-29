@@ -1,6 +1,7 @@
 # Copyright 2021 ACSONE SA/NV (<http://acsone.eu>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
+from odoo import Command
 from odoo.tools import mute_logger
 
 from .test_contract import TestContractBase
@@ -34,9 +35,7 @@ class ContractMulticompanyCase(TestContractBase):
                     "line_recurrence": True,
                     "contract_type": "purchase",
                     "contract_line_ids": [
-                        (
-                            0,
-                            0,
+                        Command.create(
                             {
                                 "product_id": cls.product_1.id,
                                 "name": "Services from #START# to #END#",
