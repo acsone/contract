@@ -40,6 +40,7 @@ class ContractLine(models.Model):
         store=True,
         readonly=True,
     )
+    product_id = fields.Many2one(index=True)
 
     @api.model
     def _compute_first_recurring_next_date(
