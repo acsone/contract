@@ -812,3 +812,11 @@ class ContractLine(models.Model):
             if not (record.is_canceled or record.display_type):
                 raise ValidationError(_("Contract line must be canceled before delete"))
         return super().unlink()
+
+    @api.constrains("is_auto_renew", "auto_renew_interval")
+    def _check_auto_renew_interval(self):
+        for rec in self:
+            if rec.is_auto_renew and not rec.auto_renew_interval:
+                raise ValidationError(
+                    _("Auto renew interval should be different then 0")
+                )
