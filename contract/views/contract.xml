@@ -256,7 +256,8 @@
                                     />
                                 </list>
                             </field>
-                            <field name="note" />
+                            <label for="note" />
+                            <field name="note" no_label="1" />
                         </page>
                         <page name="invoicing" string="Invoicing">
                             <group name="invoicing">
