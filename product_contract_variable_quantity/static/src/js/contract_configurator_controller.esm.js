@@ -7,7 +7,7 @@ patch(ProductContractConfiguratorController.prototype, {
     _getProductContractConfiguration(record) {
         const config = super._getProductContractConfiguration(record);
         config.qty_type = record.data.qty_type;
-        config.qty_formula_id = record.data.qty_formula_id;
+        config.qty_formula_id = record.data.qty_formula_id[0];
         return config;
     },
 });
