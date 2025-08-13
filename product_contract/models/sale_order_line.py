@@ -218,14 +218,10 @@ class SaleOrderLine(models.Model):
                         date_text += f" -> {line.date_end}"
                 else:
                     field_info = dict(
-                        line._fields["contract_start_date_method"].get_description(
-                            self.env
-                        )
+                        line._fields["contract_start_date_method"].get_description(self.env)
                     )
                     field_selection = dict(field_info.get("selection"))
-                    start_method_label = field_selection.get(
-                        line.contract_start_date_method
-                    )
+                    start_method_label = field_selection.get(line.contract_start_date_method)
                     date_text = f"{start_method_label}"
                     if (
                         line.recurrence_interval != "monthly"
@@ -241,6 +237,7 @@ class SaleOrderLine(models.Model):
                             line.product_id[f"force_month_{line.recurrence_interval}"]
                         )
                         date_text += f" ({force_month_label})"
+
                 field_info = dict(
                     self._fields["recurrence_interval"].get_description(self.env)
                 )
@@ -250,20 +247,28 @@ class SaleOrderLine(models.Model):
                     self._fields["recurring_invoicing_type"].get_description(self.env)
                 )
                 field_selection = dict(field_info.get("selection"))
-                invoicing_type_label = field_selection.get(
-                    line.recurring_invoicing_type
-                )
-                line.name = _(
-                    """{product}:
-    - Recurrency: {recurring_rule}
-    - Invoicing Type: {invoicing_type}
-    - Date: {date_text}
-                """
-                ).format(
-                    product=line.product_id.display_name,
-                    recurring_rule=recurring_rule_label,
-                    invoicing_type=invoicing_type_label,
-                    date_text=date_text,
-                )
+                invoicing_type_label = field_selection.get(line.recurring_invoicing_type)
 
+                # Hook call here
+                line.name = line._get_contract_name_format(
+                    date_text, recurring_rule_label, invoicing_type_label
+                )
         return res
+
+
+    def _get_contract_name_format(self, date_text, recurring_rule_label, invoicing_type_label):
+        """Hook method to format the final contract name string."""
+        self.ensure_one()
+        return _(
+            """{product}:
+        - Recurrency: {recurring_rule}
+        - Invoicing Type: {invoicing_type}
+        - Date: {date_text}
+            """
+        ).format(
+            product=self.product_id.display_name,
+            recurring_rule=recurring_rule_label,
+            invoicing_type=invoicing_type_label,
+            date_text=date_text,
+        )
+
