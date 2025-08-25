@@ -278,3 +278,28 @@ class SaleOrderLine(models.Model):
             - Date: {date_text}
             """
         )
+
+    def _prepare_base_line_for_taxes_computation(self, **kwargs):
+        """
+        This is the base method for all line amounts computations.
+        For 'is_contract' lines, we multiply the quantity by the recurrence.
+        """
+        self.ensure_one()
+        if self.is_contract:
+            return self.env["account.tax"]._prepare_base_line_for_taxes_computation(
+                self,
+                **{
+                    "tax_ids": self.tax_id,
+                    "quantity": self.product_uom_qty * self.recurrence_number,
+                    "partner_id": self.order_id.partner_id,
+                    "currency_id": self.order_id.currency_id
+                    or self.order_id.company_id.currency_id,
+                    "rate": self.order_id.currency_rate,
+                    **kwargs,
+                },
+            )
+        return super()._prepare_base_line_for_taxes_computation(**kwargs)
+
+    @api.depends("recurrence_number")
+    def _compute_amount(self):
+        return super()._compute_amount()

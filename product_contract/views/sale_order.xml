@@ -121,7 +121,7 @@
                     domain="[('contract_id','=',contract_id)]"
                     optional="hide"
                 />
-                <field name="recurrence_number" optional="hide" />
+                <field name="recurrence_number" optional="show" />
                 <field name="recurrence_interval" optional="hide" />
                 <field name="recurring_interval" optional="hide" />
                 <field name="recurring_rule_type" optional="hide" />

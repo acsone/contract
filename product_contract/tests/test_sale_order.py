@@ -615,3 +615,26 @@ class TestSaleOrder(TransactionCase):
             sale.order_line.contract_id.contract_line_ids.date_start,
             fields.Date.to_date("2025-02-28"),
         )
+
+    def test_compute_amount(self):
+        """
+        Check that recurrence is taken into account in line amounts.
+        """
+        tax = self.env["account.tax"].create(
+            {
+                "name": "10% tax",
+                "amount_type": "percent",
+                "amount": 10,
+            }
+        )
+        self.order_line1.update(
+            {
+                "price_unit": 100,
+                "product_uom_qty": 10,
+                "recurrence_number": 24,
+                "tax_id": [(4, tax.id)],
+            }
+        )
+        self.assertEqual(self.order_line1.price_subtotal, 24000)
+        self.assertEqual(self.order_line1.price_tax, 2400)
+        self.assertEqual(self.order_line1.price_total, 26400)
