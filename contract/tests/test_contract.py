@@ -1518,3 +1518,10 @@ class TestContract(TestContractBase):
         self.contract3.contract_line_ids.recurring_next_date = fields.Date.today()
         invoice_id = self.contract3.recurring_create_invoice()
         self.assertEqual(invoice_id.invoice_line_ids[0].name, "Header for May Services")
+
+    def test_multi_contract_create_invoice(self):
+        """
+        Make sure recurring_create_invoice works with multiple contracts
+        """
+        contracts = self.contract + self.contract2 + self.contract3
+        contracts.recurring_create_invoice()

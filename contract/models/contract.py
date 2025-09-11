@@ -346,7 +346,8 @@ class ContractContract(models.Model):
             body = Markup(
                 self.env._("Contract manually invoiced: %(invoice_link)s")
             ) % {"invoice_link": invoice._get_html_link(title=invoice.name)}
-            self.message_post(body=body)
+            for contract in invoice.invoice_line_ids.contract_line_id.contract_id:
+                contract.message_post(body=body)
         return invoices
 
     # === Helpers and Utilities ===
