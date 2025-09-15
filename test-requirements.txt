@@ -1,5 +1,0 @@
-odoo-addon-product-contract @ git+https://github.com/OCA/contract.git@refs/pull/1137/head#subdirectory=product_contract
-odoo-addon-contract @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract
-odoo-addon-contract-line-successor @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract_line_successor
-odoo-addon-contract-termination @ git+https://github.com/OCA/contract.git@refs/pull/1136/head#subdirectory=contract_termination
-odoo-addon-contract-payment-mode @ git+https://github.com/OCA/contract.git@refs/pull/1212/head#subdirectory=contract_payment_mode
