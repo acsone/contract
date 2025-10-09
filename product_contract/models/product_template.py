@@ -167,3 +167,23 @@ class ProductTemplate(models.Model):
         """
         if any([product.is_contract and product.type != "service" for product in self]):
             raise ValidationError(_("Contract product should be service type"))
+
+    @api.constrains("auto_renew_interval")
+    def _check_auto_renew_interval_is_strictly_positive(self):
+        for product in self:
+            if not product.is_contract:
+                return
+            if product.auto_renew_interval <= 0:
+                raise ValidationError(
+                    _("Value of auto_renew_interval should be strictly positive")
+                )
+
+    @api.constrains("termination_notice_interval")
+    def _check_termination_notice_interval_is_positive(self):
+        for product in self:
+            if not product.is_contract:
+                return
+            if product.termination_notice_interval < 0:
+                raise ValidationError(
+                    _("Value of termination_notice_interval should be positive")
+                )
