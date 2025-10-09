@@ -4,6 +4,7 @@
 from dateutil.relativedelta import relativedelta
 
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class SaleOrderLineContractMixin(models.AbstractModel):
@@ -224,3 +225,14 @@ class SaleOrderLineContractMixin(models.AbstractModel):
             - relativedelta(days=1)
         )
         return date_end
+
+    @api.constrains("auto_renew_interval")
+    def _check_auto_renew_interval_is_strictly_positive(self):
+        for line in self:
+            if not line.is_contract or not line.is_auto_renew:
+                return
+            if line.auto_renew_interval <= 0:
+                raise ValidationError(
+                    f"Value of {line._fields['auto_renew_interval'].string}"
+                    " should be strictly positive"
+                )
