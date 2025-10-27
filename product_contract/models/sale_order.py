@@ -75,30 +75,14 @@ class SaleOrder(models.Model):
                 and r
                 not in r.contract_id.contract_line_ids.mapped("sale_order_line_id")
             )
-            contract_templates = self.env["contract.template"]
-            for order_line in line_to_create_contract:
-                contract_template = order_line.product_id.with_company(
-                    rec.company_id
-                ).property_contract_template_id
-                if not contract_template:
-                    raise ValidationError(
-                        _(
-                            "You must specify a contract "
-                            "template for '%(product_name)s' product "
-                            "in '%(company_name)s' company."
-                        )
-                        % {
-                            "product_name": order_line.product_id.name,
-                            "company_name": rec.company_id.name,
-                        }
-                    )
-                contract_templates |= contract_template
+            contract_templates = (
+                line_to_create_contract._get_related_contract_templates()
+            )
             for contract_template in contract_templates:
-                order_lines = line_to_create_contract.filtered(
-                    lambda r, template=contract_template: r.product_id.with_company(
-                        r.order_id.company_id
-                    ).property_contract_template_id
-                    == template
+                order_lines = (
+                    line_to_create_contract._filter_order_lines_from_contract_template(
+                        contract_template
+                    )
                 )
                 contract = contract_model.create(
                     rec._prepare_contract_value(contract_template)
