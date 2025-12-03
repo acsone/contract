@@ -69,6 +69,24 @@ class ContractLine(models.Model):
             max_date_end=False,
         )
 
+    @api.depends("contract_id.partner_id", "product_id")
+    def _compute_analytic_distribution(self):
+        for line in self:
+            if not line.display_type:
+                partner_categ_ids = line.contract_id.partner_id.category_id.ids
+                distribution = line.env[
+                    "account.analytic.distribution.model"
+                ]._get_distribution(
+                    {
+                        "product_id": line.product_id.id,
+                        "product_categ_id": line.product_id.categ_id.id,
+                        "partner_id": line.contract_id.partner_id.id,
+                        "partner_category_id": partner_categ_ids,
+                        "company_id": line.company_id.id,
+                    }
+                )
+                line.analytic_distribution = distribution or line.analytic_distribution
+
     @api.constrains("recurring_next_date", "date_start")
     def _check_recurring_next_date_start_date(self):
         for line in self:
