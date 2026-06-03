@@ -361,9 +361,37 @@ class ContractLine(models.Model):
                     self.display_name,
                 )
             )
-        quantity = self._get_quantity_to_invoice(
-            self.date_start,
-            self.date_end,
-            self.date_start,
+
+        rule_mapping = {
+            "daily": "days",
+            "weekly": "weeks",
+            "monthly": "months",
+            "yearly": "years",
+        }
+        interval_unit = rule_mapping.get(self.recurring_rule_type)
+        period_length = relativedelta(**{interval_unit: self.recurring_interval})
+        currency = (
+            self.contract_id.pricelist_id.currency_id
+            if self.contract_id.pricelist_id
+            else self.currency_id
         )
-        return quantity * self.price_unit
+
+        current_period_start = self.date_start
+        total_amount = 0.0
+        while current_period_start <= self.date_end:
+            current_period_end = (
+                current_period_start + period_length - relativedelta(days=1)
+            )
+            if current_period_end > self.date_end:
+                current_period_end = self.date_end
+            qty = self._get_quantity_to_invoice(
+                current_period_start,
+                current_period_end,
+                current_period_start,  # Mock an invoice date at period start
+            )
+            subtotal = qty * self.price_unit * (1 - (self.discount / 100.0))
+            if currency:
+                subtotal = currency.round(subtotal)
+            total_amount += subtotal
+            current_period_start += period_length
+        return total_amount
