@@ -226,7 +226,7 @@ msgstr ""
 #. module: contract
 #: model_terms:ir.ui.view,arch_db:contract.contract_contract_form_view
 msgid ""
-"<strong>Recurring invoice generation failed</strong>\n"
+"<strong>Recurring generation failed</strong>\n"
 "                            <span> on </span>"
 msgstr ""
 
@@ -831,8 +831,8 @@ msgid "Email Contract Template"
 msgstr ""
 
 #. module: contract
-#: model:ir.model.fields,help:contract.field_contract_contract__invoice_generation_error
-msgid "Error message from the most recent failed scheduled invoicing run."
+#: model:ir.model.fields,help:contract.field_contract_contract__last_generation_error
+msgid "Error message from the most recent failed scheduled generation run."
 msgstr ""
 
 #. module: contract
@@ -877,6 +877,11 @@ msgstr ""
 #. module: contract
 #: model:ir.actions.server,name:contract.contract_cron_for_invoice_ir_actions_server
 msgid "Generate Recurring Invoices from Contracts"
+msgstr ""
+
+#. module: contract
+#: model_terms:ir.ui.view,arch_db:contract.contract_contract_search_view
+msgid "Generation Failed"
 msgstr ""
 
 #. module: contract
@@ -969,18 +974,13 @@ msgid "Invoice Every"
 msgstr ""
 
 #. module: contract
-#: model:ir.model.fields,field_description:contract.field_contract_contract__invoice_generation_error
-msgid "Invoice Generation Error"
+#: model:ir.model.fields,field_description:contract.field_contract_contract__last_generation_error
+msgid "Last Generation Error"
 msgstr ""
 
 #. module: contract
-#: model:ir.model.fields,field_description:contract.field_contract_contract__invoice_generation_error_date
-msgid "Invoice Generation Error Date"
-msgstr ""
-
-#. module: contract
-#: model_terms:ir.ui.view,arch_db:contract.contract_contract_search_view
-msgid "Invoice Generation Failed"
+#: model:ir.model.fields,field_description:contract.field_contract_contract__last_generation_error_date
+msgid "Last Generation Error Date"
 msgstr ""
 
 #. module: contract
@@ -1100,7 +1100,7 @@ msgstr ""
 
 #. module: contract
 #: model_terms:ir.ui.view,arch_db:contract.contract_contract_tree_view
-msgid "Last scheduled invoicing failed - click for details"
+msgid "Last scheduled generation failed - click for details"
 msgstr ""
 
 #. module: contract
@@ -1438,6 +1438,18 @@ msgstr ""
 #: model:ir.model.fields,field_description:contract.field_contract_contract__line_recurrence
 #: model:ir.model.fields,field_description:contract.field_contract_template__line_recurrence
 msgid "Recurrence at line level?"
+msgstr ""
+
+#. module: contract
+#. odoo-python
+#: code:addons/contract/models/contract.py:0
+msgid "Recurring %(type_label)s generation failed"
+msgstr ""
+
+#. module: contract
+#. odoo-python
+#: code:addons/contract/models/contract.py:0
+msgid "Recurring %(type_label)s generation succeeded"
 msgstr ""
 
 #. module: contract
