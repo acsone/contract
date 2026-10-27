@@ -92,22 +92,26 @@ class ContractContract(models.Model):
                 # this use case is possible when recurring_create_invoice is
                 # called for a finished contract
                 continue
-            contract_lines = contract._get_lines_to_invoice(date_ref)
-            if not contract_lines:
-                continue
-            sale_values = contract._prepare_sale(date_ref)
-            for line in contract_lines:
-                sale_values.setdefault("order_line", [])
-                invoice_line_values = line._prepare_sale_line(
-                    sale_values=sale_values,
-                )
-                if invoice_line_values:
-                    sale_values["order_line"].append(
-                        Command.create(invoice_line_values)
-                    )
-            sales_values.append(sale_values)
-            contract_lines._update_last_date_invoiced()
+            sale_values = contract._prepare_recurring_sale_values(date_ref)
+            if sale_values:
+                sales_values.append(sale_values)
         return sales_values
+
+    def _prepare_recurring_sale_values(self, date_ref):
+        self.ensure_one()
+        contract_lines = self._get_lines_to_invoice(date_ref)
+        if not contract_lines:
+            return {}
+        sale_values = self._prepare_sale(date_ref)
+        for line in contract_lines:
+            sale_values.setdefault("order_line", [])
+            invoice_line_values = line._prepare_sale_line(
+                sale_values=sale_values,
+            )
+            if invoice_line_values:
+                sale_values["order_line"].append(Command.create(invoice_line_values))
+        contract_lines._update_last_date_invoiced()
+        return sale_values
 
     def _recurring_create_sale(self, date_ref=False):
         sales_values = self._prepare_recurring_sales_values(date_ref)

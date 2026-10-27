@@ -3,6 +3,8 @@
 # Copyright 2017 Angel Moya <angel.moya@pesol.es>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from unittest.mock import patch
+
 from odoo import Command
 from odoo.exceptions import ValidationError
 
@@ -135,6 +137,15 @@ class TestContractSale(ContractSaleCommon):
             }
         )
         self.assertEqual(a_contract_with_no_lines._prepare_recurring_sales_values(), [])
+
+    def test__prepare_recurring_sale_values_no_sale_line(self):
+        with patch.object(
+            type(self.contract_line), "_prepare_sale_line", return_value={}
+        ):
+            sale_values = self.contract._prepare_recurring_sale_values(
+                self.contract.recurring_next_date
+            )
+        self.assertEqual(sale_values["order_line"], [])
 
     def test__prepare_sale_line_vals_with_order_id(self):
         order = self.contract.recurring_create_sale()[0]
