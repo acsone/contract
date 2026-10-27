@@ -147,6 +147,21 @@ class TestContractSale(ContractSaleCommon):
             )
         self.assertEqual(sale_values["order_line"], [])
 
+    def test_related_sales_without_contract_line(self):
+        with patch.object(
+            type(self.contract_line), "_prepare_sale_line", return_value={}
+        ):
+            sales = self.contract._recurring_create_sale()
+        self.assertEqual(self.contract._get_related_sales(), sales)
+
+    def test_autoconfirm_without_contract_line(self):
+        self.contract.sale_autoconfirm = True
+        with patch.object(
+            type(self.contract_line), "_prepare_sale_line", return_value={}
+        ):
+            sales = self.contract._recurring_create_sale()
+        self.assertEqual(sales.state, "sale")
+
     def test__prepare_sale_line_vals_with_order_id(self):
         order = self.contract.recurring_create_sale()[0]
         recurring_next_date = self.contract.recurring_next_date

@@ -25,6 +25,7 @@ class ContractContract(models.Model):
                 "partner_id": self.partner_id,
                 "date_order": date_ref,
                 "origin": self.name,
+                "contract_id": self.id,
                 "company_id": self.company_id.id,
                 "user_id": self.partner_id.user_id.id,
             }
@@ -37,11 +38,7 @@ class ContractContract(models.Model):
 
     def _get_related_sales(self):
         self.ensure_one()
-        sales = (
-            self.env["sale.order.line"]
-            .search([("contract_line_id", "in", self.contract_line_ids.ids)])
-            .mapped("order_id")
-        )
+        sales = self.env["sale.order"].search([("contract_id", "in", self.ids)])
         return sales
 
     def _compute_sale_count(self):

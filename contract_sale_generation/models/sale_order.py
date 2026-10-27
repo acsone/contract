@@ -7,6 +7,7 @@ from odoo import fields, models
 class SaleOrder(models.Model):
     _inherit = "sale.order"
 
+    contract_id = fields.Many2one("contract.contract", index=True)
     contract_auto_confirm = fields.Boolean(
         compute="_compute_contract_auto_confirm",
         help="This is a technical field in order to know if the order should"
@@ -15,10 +16,7 @@ class SaleOrder(models.Model):
 
     def _compute_contract_auto_confirm(self):
         sale_auto_confirm = self.filtered(
-            lambda sale: any(
-                line.contract_line_id.contract_id.sale_autoconfirm
-                for line in sale.order_line
-            )
+            lambda sale: sale.contract_id.sale_autoconfirm
         )
         sale_auto_confirm.contract_auto_confirm = True
         (self - sale_auto_confirm).contract_auto_confirm = False
