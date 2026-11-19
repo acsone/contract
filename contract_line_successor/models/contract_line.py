@@ -437,10 +437,7 @@ class ContractLine(models.Model):
                         rec.contract_id.message_post(body=msg)
                 else:
                     rec.write(
-                        {
-                            "is_auto_renew": False,
-                            "manual_renew_needed": manual_renew_needed,
-                        }
+                        rec._prepare_value_for_stop(rec.date_end, manual_renew_needed)
                     )
         return self
 
